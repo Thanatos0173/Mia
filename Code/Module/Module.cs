@@ -65,11 +65,11 @@ namespace Celeste.Mod.Module
             stopwatch.Restart();
         }
 
-        private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Celeste.Player self)
+        private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
         {
-            _ = self.Stamina;
+            int previousStamina = self.Stamina;
             Vector2 previousPosition = self.Position;
-            _ = self.Dashes;
+            int dashesLefts = self.Dashes;
             orig(self);
             if (self.Position != previousPosition)
             {
@@ -98,4 +98,5 @@ namespace Celeste.Mod.Module
 
 
         }
+    }
 }
