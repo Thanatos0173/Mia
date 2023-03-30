@@ -67,10 +67,13 @@ namespace Celeste.Mod.Module
 
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
         {
-            int previousStamina = self.Stamina;
+            float previousStamina = self.Stamina;
             Vector2 previousPosition = self.Position;
             int dashesLefts = self.Dashes;
             orig(self);
+
+            
+
             if (self.Position != previousPosition)
             {
                 stopwatch.Restart();
@@ -79,7 +82,7 @@ namespace Celeste.Mod.Module
             {
                 self.Die(self.Position);
             }
-            if (Engine.Scene is Celeste.Level level)
+            if (Engine.Scene is Level level)
             {
                 if (level.InCutscene)
                 {
@@ -93,10 +96,51 @@ namespace Celeste.Mod.Module
                 {
                     stopwatch.Restart();
                 }
+
             }
 
-
+            Utils.print(GetEntityFromXYCenter(GetTileUnderPlayer()).ToString());
+            
 
         }
+        public static Entity GetEntityFromXYCenter(Vector2 realPos)
+        {
+            //System.Collections.Generic.List<Entity> entities = Celeste.Celeste.Scene.Tracker.GetEntities<Entity>();
+            EntityList entities = Celeste.Scene.Entities;/*Tracker.GetEntities<Entity>();*/
+            for (int i = 0; i < entities.Count; i++)
+            {
+                if (entities[i].Collidable && entities[i].CollidePoint(realPos) && entities[i].Tag != 16) // 16=Tag of player
+                {
+                    // Collided with the point and is collidable
+                    return entities[i];
+                }
+            }
+            return null;
+        }
+
+        public static Vector2 GetTilePosFromXYCenter(Vector2 realPos)
+        {
+            int offsetX = -428;
+            int offsetY = -244;
+            int width = 8, height = 8;
+            return new Vector2((int)((realPos.X - offsetX) / width), (int)((realPos.Y - offsetY) / height));
+        }
+
+        public static Vector2 GetTileUnderPlayer()
+        {
+            Vector2 playerPos = GetPlayerPos();
+            playerPos = new Vector2(playerPos.X, playerPos.Y + 4);
+
+            return GetTilePosFromXYCenter(playerPos); // This is to account for offset
+        }
+
+        public static Vector2 GetPlayerPos()
+        {
+            Player player = Celeste.Scene.Tracker.GetEntity<Player>();
+            if (player != null)
+                return player.Position; // This is the bottom center
+            return new Vector2(0, 0);
+        }
+
     }
 }
