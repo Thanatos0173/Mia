@@ -68,6 +68,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Module\Manager.cs" />
     <Compile Include="Code\Module\MiaOptions.cs" />
     <Compile Include="Code\Module\Module.cs" />
     <Compile Include="Code\Module\Settings.cs" />

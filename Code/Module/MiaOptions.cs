@@ -22,7 +22,7 @@ namespace Celeste.Mod.Mia.MiaOptions
         }
         protected override void addOptionsToMenu(TextMenu menu)
         {
-            menu.Add(new TextMenu.Slider("Idle Time", IntString, 0, 300, Module.Module.Settings.IdleTime)
+            menu.Add(new TextMenu.Slider("Idle Time", IntString, 5, 300, Module.Module.Settings.IdleTime)
                  .Change(newValue => Module.Module.Settings.IdleTime = newValue)) ;
 
         }
