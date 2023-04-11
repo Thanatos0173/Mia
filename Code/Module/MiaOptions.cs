@@ -25,6 +25,8 @@ namespace Celeste.Mod.Mia.MiaOptions
             menu.Add(new TextMenu.Slider("Idle Time", IntString, 5, 300, Module.Module.Settings.IdleTime)
                  .Change(newValue => Module.Module.Settings.IdleTime = newValue)) ;
 
+            menu.Add(new TextMenu.OnOff("Kill player", Module.Module.Settings.KillPlayer)
+                .Change(newValue => Module.Module.Settings.KillPlayer = newValue));
         }
     }
 }

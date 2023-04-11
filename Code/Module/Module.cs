@@ -1,18 +1,6 @@
-﻿using Celeste.Mod.UI;
-using FMOD.Studio;
-using Monocle;
-using Celeste;
+﻿using Monocle;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FMOD;
 using Microsoft.Xna.Framework;
-using On.Celeste;
-using Celeste.Mod;
-using MonoMod.Utils;
 
 using Celeste.Mod.Mia.UtilsClass;
 using Celeste.Mod.Mia.Settings;
@@ -20,16 +8,13 @@ using CelesteBot.Manager;
 
 
 using System.Diagnostics;
-using IL.Celeste;
 using Microsoft.Xna.Framework.Graphics;
-
+using System.Linq;
 
 namespace Celeste.Mod.Module
 {
     public class Module : EverestModule
     {
-
-        // Only one alive module instance can exist at any given time.
         public static Module Instance;
 
         private Stopwatch stopwatch;
@@ -39,9 +24,6 @@ namespace Celeste.Mod.Module
         {
             Instance = this;
         }
-
-        // Set up any hooks, event handlers and your mod in general here.
-        // Load runs before Celeste itself has initialized properly.
         public override void Load()
         {
             Utils.print("TIPE Mod Loaded");
@@ -49,13 +31,6 @@ namespace Celeste.Mod.Module
             Everest.Events.Player.OnSpawn += onSpawn;
             stopwatch = new Stopwatch();
         }
-
-        // Optional, do anything requiring either the Celeste or mod content here.
-        public override void LoadContent(bool firstLoad)
-        {
-        }
-
-        // Unload the entirety of your mod's content. Free up any native resources.
         public override void Unload()
         {
             Utils.print("TIPE Mod unloaded");
@@ -65,7 +40,8 @@ namespace Celeste.Mod.Module
 
         private void onSpawn(Player player)
         {
-            stopwatch.Restart();
+            if(Module.Settings.KillPlayer)stopwatch.Restart();
+            if (Module.Settings.Debug && Module.Settings.KillPlayer) Utils.print("Starting stopwatch");
         }
 
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
@@ -73,35 +49,62 @@ namespace Celeste.Mod.Module
             float previousStamina = self.Stamina;
             Vector2 previousPosition = self.Position;
             int dashesLefts = self.Dashes;
+            bool onVoidLevel = false;
             orig(self);
-
-
 
             if (self.Position != previousPosition)
             {
-                stopwatch.Restart();
+                if(Module.Settings.KillPlayer)stopwatch.Restart();
             }
             if (stopwatch.Elapsed >= TimeSpan.FromSeconds(Settings.IdleTime))
             {
-                self.Die(self.Position);
+                if(Module.Settings.KillPlayer)self.Die(self.Position);
+                if (Module.Settings.Debug && Module.Settings.KillPlayer) Utils.print("Player was idle too long : killed");
+
             }
             if (Engine.Scene is Level level)
             {
+                if (self.Position != previousPosition)
+                {
+                    String text = "";
+                    EntityList entities = level.Entities;
+                    for (int i = 0; i < entities.Count; i++)
+                    {
+                        if (entities[i].Visible && level.Entities[i].Tag == 0)
+                        {
+                            text += entities[i].ToString();
+                            string position = level.Entities[i].Position.ToString();
+                            string height = level.Entities[i].Height.ToString();
+                            string width = level.Entities[i].Width.ToString();
+                            text += "(" + position + "{H: " + height + " W: " + width + "},tag: " + level.Entities[i].Tag.ToString() + ")\n";
+
+                        }
+                    }
+                    System.IO.File.WriteAllText(@"C:\Users\elioo\OneDrive\Bureau\TIPE\CelesteSaving\tiles.txt", text);
+                    //Utils.print("Entities :",text);
+
+                }
                 if (level.InCutscene)
                 {
                     level.SkipCutscene();
+                    if (Module.Settings.Debug) Utils.print("Skipping cutscene :", Engine.Scene?.GetType().FullName.ToString());
+
                 }
-                if (level.Session.LevelData.Name.ToString() == "void")
+                if (level.Session.LevelData.Name.ToString() == "void" && ! onVoidLevel)
                 {
-                    stopwatch.Stop();
+                    if(Module.Settings.KillPlayer) stopwatch.Stop();
+                    onVoidLevel = true;
+                    if (Module.Settings.Debug && Module.Settings.KillPlayer) Utils.print("Stopping stopwatch : currently in \"void\" level");
                 }
-                if (level.Session.LevelData.Name.ToString() != "void" && !stopwatch.IsRunning && stopwatch != null)
+                if (level.Session.LevelData.Name.ToString() != "void" && !stopwatch.IsRunning && stopwatch != null && onVoidLevel)
                 {
-                    stopwatch.Restart();
+                    onVoidLevel = false;
+                    if(Module.Settings.KillPlayer)stopwatch.Restart();
+                    if (Module.Settings.Debug && Module.Settings.KillPlayer) Utils.print("Restarting stopwatch : exiting \"void\" level");
+
                 }
 
             }
-            Manager.PutEntitiesToFile();
         }
     }
 }
