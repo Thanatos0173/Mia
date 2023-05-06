@@ -1,4 +1,4 @@
-#MIA : A Celeste Bot
+# MIA : A Celeste Bot
 
 In the context of a school project, I've created an AI wich aim to play Celeste and evolve, using NEAT algorith.
 
