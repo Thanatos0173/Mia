@@ -71,6 +71,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -83,9 +85,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Module\FileHandling.cs" />
-    <Compile Include="Code\Module\Manager.cs" />
     <Compile Include="Code\Module\MiaOptions.cs" />
-    <Compile Include="Code\Module\Module.cs" />
+    <Compile Include="Code\Module\Main.cs" />
     <Compile Include="Code\Module\PlayerManager.cs" />
     <Compile Include="Code\Module\Settings.cs" />
     <Compile Include="Code\Module\Utils.cs" />

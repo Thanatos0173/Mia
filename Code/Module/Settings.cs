@@ -15,14 +15,14 @@ using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.Mia.Settings
 {
-    public class ExampleModuleSettings : EverestModuleSettings
+    public class SettingsClass : EverestModuleSettings
     {
         [SettingInGame(true)]
         public int IdleTime { get; set; } = 15;
         public bool KillPlayer { get; set; } = true;
 
         public bool Debug { get; set; } = false;
-        public string Path { get; private set; }
+        public string Path { get; private set; } = "";
 
         public void CreateIdleTimeEntry(TextMenu menu, bool inGame)
         {
@@ -31,8 +31,8 @@ namespace Celeste.Mod.Mia.Settings
         }
         public void CreateDebugEntry(TextMenu menu, bool inGame)
         {
-            menu.Add(new TextMenu.OnOff("Debug", Module.Module.Settings.Debug)
-                .Change(newValue => Module.Module.Settings.Debug = newValue));
+            menu.Add(new TextMenu.OnOff("Debug", Mia.Main.Settings.Debug)
+                .Change(newValue => Mia.Main.Settings.Debug = newValue));
         }
 
         public void CreatePathEntry(TextMenu menu, bool inGame)
@@ -40,8 +40,8 @@ namespace Celeste.Mod.Mia.Settings
             menu.Add(new TextMenu.Button("File Path")
                 .Pressed(() => {
                     menu.SceneAs<Overworld>().Goto<OuiModOptionString>()
-                        .Init<OuiModOptions>(Module.Module.Settings.Path,
-                            value => Module.Module.Settings.Path = value+"\n",10000000);
+                        .Init<OuiModOptions>(Mia.Main.Settings.Path,
+                            value => Mia.Main.Settings.Path = value+"\n",10000000);
                 }));
         
         }

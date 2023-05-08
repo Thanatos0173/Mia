@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Schema;
 
 using Celeste.Mod.Mia.Settings;
-using Celeste.Mod.Module;
+using Celeste.Mod.Mia;
 
 namespace Celeste.Mod.Mia.MiaOptions
 {
@@ -22,11 +22,11 @@ namespace Celeste.Mod.Mia.MiaOptions
         }
         protected override void addOptionsToMenu(TextMenu menu)
         {
-            menu.Add(new TextMenu.Slider("Idle Time", IntString, 5, 300, Module.Module.Settings.IdleTime)
-                 .Change(newValue => Module.Module.Settings.IdleTime = newValue)) ;
+            menu.Add(new TextMenu.Slider("Idle Time", IntString, 5, 300, Mia.Main.Settings.IdleTime)
+                 .Change(newValue => Mia.Main.Settings.IdleTime = newValue)) ;
 
-            menu.Add(new TextMenu.OnOff("Kill player", Module.Module.Settings.KillPlayer)
-                .Change(newValue => Module.Module.Settings.KillPlayer = newValue));
+            menu.Add(new TextMenu.OnOff("Kill player", Mia.Main.Settings.KillPlayer)
+                .Change(newValue => Mia.Main.Settings.KillPlayer = newValue));
         }
     }
 }
