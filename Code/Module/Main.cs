@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using Celeste.Mod.Mia.UtilsClass;
 using Celeste.Mod.Mia.Settings;
 using Celeste.Mod.Mia.PlayerManager;
-
+using Celeste.Mod.Mia.TileManager;
 
 using System.Diagnostics;
 using System.Linq;
@@ -59,8 +59,8 @@ namespace Celeste.Mod.Mia
             if (Main.Settings.Debug && Main.Settings.KillPlayer) Utils.print("Starting stopwatch");
             if (Engine.Scene is Level level)
             {
-                Utils.putToFile(level);
-                Utils.entityList(level, player);
+                //Utils.putToFile(level);
+                //Utils.entityList(level, player);
             }
         }
         bool onVoidLevel = false;
@@ -82,12 +82,13 @@ namespace Celeste.Mod.Mia
             if (Engine.Scene is Level level)
             {
                 Mia.PlayerManager.PlayerManager.ManagePlayer(stopwatch, self, level, previousPosition, onVoidLevel);
-                Utils.entityList(level, self);
+                //Utils.entityList(level, self);
                 if(previousPosition != self.Position && !self.IsIntroState)
                 {
+                    Mia.TileManager.TileManager.getEntityAroundPlayerAsTiles(level, self);
 
-                                        Console.Write('\r');
-                                        Console.Write(Utils.getTilesAroundPlayerAsString(level,level.SolidsData.ToArray(),self));
+                                        //Console.Write('\r');
+                                        //Console.Write(Utils.getTilesAroundPlayerAsString(level,level.SolidsData.ToArray(),self));
                     //Utils.getTilesAroundPlayerAsString(level, level.SolidsData.ToArray(), self);
                 }
             }

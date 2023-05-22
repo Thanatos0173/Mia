@@ -20,7 +20,6 @@ namespace Celeste.Mod.Mia.FileHandling
             if (!(path.IndexOfAny(Path.GetInvalidPathChars()) == -1))
             {
                 newPath = Environment.CurrentDirectory;
-//                Utils.print("File Path",path,"invalid. Saving at", newPath);
             }
             List<string> result = new List<string>();
             string tilesFile = newPath + @"\Mia\Tiles";

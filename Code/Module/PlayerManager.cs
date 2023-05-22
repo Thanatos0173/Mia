@@ -21,7 +21,7 @@ namespace Celeste.Mod.Mia.PlayerManager
 
             if (player.Position != previousPosition)
             {
-                if (Mia.Main.Settings.KillPlayer) stopwatch.Restart(); Utils.putToFile(level);
+                if (Mia.Main.Settings.KillPlayer) stopwatch.Restart(); //Utils.putToFile(level);
                
             }
             if (level.InCutscene)
