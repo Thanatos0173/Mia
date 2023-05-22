@@ -22,7 +22,6 @@ namespace Celeste.Mod.Mia.Settings
         public bool KillPlayer { get; set; } = true;
 
         public bool Debug { get; set; } = false;
-        public string Path { get; private set; } = "";
 
         public void CreateIdleTimeEntry(TextMenu menu, bool inGame)
         {
@@ -35,16 +34,6 @@ namespace Celeste.Mod.Mia.Settings
                 .Change(newValue => Mia.Main.Settings.Debug = newValue));
         }
 
-        public void CreatePathEntry(TextMenu menu, bool inGame)
-        {
-            menu.Add(new TextMenu.Button("File Path")
-                .Pressed(() => {
-                    menu.SceneAs<Overworld>().Goto<OuiModOptionString>()
-                        .Init<OuiModOptions>(Mia.Main.Settings.Path,
-                            value => Mia.Main.Settings.Path = value+"\n",10000000);
-                }));
-        
-        }
         
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Monocle;
 using System;
+using System.Net;
 using Microsoft.Xna.Framework;
 
 using Celeste.Mod.Mia.UtilsClass;
@@ -35,7 +36,6 @@ namespace Celeste.Mod.Mia
             Utils.print("TIPE Mod Loaded");
             On.Celeste.Player.Update += ModPlayerUpdate;
             Everest.Events.Player.OnSpawn += onSpawn;
-            Everest.Events.Level.OnLoadLevel += LoadLevel;
             stopwatch = new Stopwatch();
         }
 
@@ -45,32 +45,18 @@ namespace Celeste.Mod.Mia
             Utils.print("TIPE Mod unloaded");
             On.Celeste.Player.Update -= ModPlayerUpdate;
             Everest.Events.Player.OnSpawn -= onSpawn;
-            Everest.Events.Level.OnLoadLevel -= LoadLevel;
         }
 
-        private void LoadLevel(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
-        {
-         //   if(isFromLoader) Mia.FileHandling.FileHandling.saveTiles(Settings.Path, Eee(level, level.SolidsData.ToArray(), level.Entities.FirstOrDefault(entity => entity is Player) as Player));
-        }
-
+        
         private void onSpawn(Player player)
         {
             if (Main.Settings.KillPlayer) stopwatch.Restart();
             if (Main.Settings.Debug && Main.Settings.KillPlayer) Utils.print("Starting stopwatch");
-            if (Engine.Scene is Level level)
-            {
-                //Utils.putToFile(level);
-                //Utils.entityList(level, player);
-            }
         }
         bool onVoidLevel = false;
 
 
-        private int j = 0;
-        
-
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
-
         {
             float previousStamina = self.Stamina;
             Vector2 previousPosition = self.Position;
@@ -78,19 +64,13 @@ namespace Celeste.Mod.Mia
 
             orig(self);
 
-            j = 0;
+
             if (Engine.Scene is Level level)
             {
-                Mia.PlayerManager.PlayerManager.ManagePlayer(stopwatch, self, level, previousPosition, onVoidLevel);
-                //Utils.entityList(level, self);
-                if(previousPosition != self.Position && !self.IsIntroState)
-                {
-                    Mia.TileManager.TileManager.getEntityAroundPlayerAsTiles(level, self);
-
-                                        //Console.Write('\r');
-                                        //Console.Write(Utils.getTilesAroundPlayerAsString(level,level.SolidsData.ToArray(),self));
-                    //Utils.getTilesAroundPlayerAsString(level, level.SolidsData.ToArray(), self);
-                }
+                PlayerManager.PlayerManager.ManagePlayer(stopwatch, self, level, previousPosition, onVoidLevel);
+                TileManager.TileManager.getEntityAroundPlayerAsTiles(level, self);
+                TileManager.TileManager.getTilesAroundPlayer(level,level.SolidsData.ToArray() ,self);
+                
             }
         }
     }
