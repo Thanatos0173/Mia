@@ -1,17 +1,6 @@
-﻿using On.Celeste.Mod;
-using IL.Celeste.Mod;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Celeste.Mod.UI;
+﻿using Celeste.Mod.UI;
 
 using Celeste.Mod.Mia.MiaOptions;
-using System.Xml.Serialization;
-using YamlDotNet.Serialization;
-using FMOD;
-using Microsoft.Xna.Framework;
 
 namespace Celeste.Mod.Mia.Settings
 {

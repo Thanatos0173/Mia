@@ -1,22 +1,11 @@
 ﻿using Monocle;
 using System;
-using System.Net;
 using Microsoft.Xna.Framework;
 
 using Celeste.Mod.Mia.UtilsClass;
 using Celeste.Mod.Mia.Settings;
-using Celeste.Mod.Mia.PlayerManager;
-using Celeste.Mod.Mia.TileManager;
 
 using System.Diagnostics;
-using System.Linq;
-using System.Collections.Generic;
-using IL.MonoMod;
-using Celeste.Mod.Mia.FileHandling;
-using System.IO;
-using Microsoft.Scripting.Hosting;
-using IronPython.Hosting;
-using System.Reflection;
 
 namespace Celeste.Mod.Mia
 {

@@ -1,10 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Monocle;
-using Celeste.Mod.Mia.UtilsClass;
 using Celeste.Mod.Mia.Plage;
-using System.Diagnostics;
 
 namespace Celeste.Mod.Mia.TileManager
 {

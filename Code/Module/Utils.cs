@@ -1,14 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Remoting;
-using System.Runtime.Serialization.Formatters;
-using Celeste.Mod.Mia.FileHandling;
-using IL.Celeste;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Monocle;
 
 namespace Celeste.Mod.Mia.UtilsClass
 {

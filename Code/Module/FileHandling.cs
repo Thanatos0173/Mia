@@ -1,14 +1,7 @@
 ﻿using Celeste.Mod.Mia.UtilsClass;
-using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 
 namespace Celeste.Mod.Mia.FileHandling
 {
