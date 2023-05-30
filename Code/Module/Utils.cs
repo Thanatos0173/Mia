@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using static Celeste.TrackSpinner;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace Celeste.Mod.Mia.UtilsClass
 {
@@ -18,7 +21,7 @@ namespace Celeste.Mod.Mia.UtilsClass
                 text += arg.ToString();
                 text += " ";
             }
-            Logger.Log("Tipe Mod", text);
+            Logger.Log("Mia", text);
         }
         public static void printList(List<string> arguments)
         {
@@ -43,6 +46,7 @@ namespace Celeste.Mod.Mia.UtilsClass
             Utils.print(text);
 
         }
+
 
     }
 }

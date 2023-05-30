@@ -11,7 +11,7 @@ namespace Celeste.Mod.Mia.Settings
         public bool KillPlayer { get; set; } = true;
 
         public bool Debug { get; set; } = false;
-
+        public bool GetTiles { get; set; } = false;
         public void CreateIdleTimeEntry(TextMenu menu, bool inGame)
         {
             menu.Add(new TextMenu.Button("Idle Time Manager")
@@ -23,7 +23,13 @@ namespace Celeste.Mod.Mia.Settings
                 .Change(newValue => Mia.Main.Settings.Debug = newValue));
         }
 
-        
+        public void CreateGetTilesEntry(TextMenu menu, bool inGame)
+        {
+            menu.Add(new TextMenu.OnOff("Retrieve tiles", Mia.Main.Settings.GetTiles)
+                .Change(newValue => Mia.Main.Settings.GetTiles = newValue));
+        }
+
+
     }
 }
 
