@@ -1,6 +1,5 @@
 ﻿using Monocle;
 using System;
-using System.Threading;
 using Microsoft.Xna.Framework;
 
 using Celeste.Mod.Mia.UtilsClass;
@@ -9,20 +8,6 @@ using Celeste.Mod.Mia.Settings;
 
 
 using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using YamlDotNet.Core.Tokens;
-using IL.Celeste;
-using Microsoft.Xna.Framework.Input;
-using IL.FMOD.Studio;
-using MonoMod.Utils;
-using On.Celeste;
-using static System.Windows.Forms.AxHost;
-using static IronPython.Modules._ast;
-using WindowsInput.Native;
-using WindowsInput;
-using System.Windows.Forms;
-
 
 namespace Celeste.Mod.Mia
 {
@@ -46,15 +31,10 @@ namespace Celeste.Mod.Mia
         private static bool walkLR = false;
         private static bool walkUD = false;
         private static Vector2 direction = new Vector2(1, 0);
-        private static bool grabbing = false;
-        private static bool dash = false;
+        private static bool grabbing { get; set; } = false;
+        private static bool dash { get; set; }  = false;
 
         private static float baseTimer;
-        private static float timer = 0;
-        private static bool jump = false;
-
-        private static bool fly = false;
-        public bool grab { get; set; } = false;
 
 
         
@@ -111,6 +91,19 @@ namespace Celeste.Mod.Mia
             dash = true;
             
         }
+        [Command("grab", "Start/Stop grabbing. Optionnal argument : if true then the player start grabbing, if false the player end grabbing. If nothing, the player shift between start and stop")]
+        public static void GrabCommand(string force)
+        {
+            try
+            {
+                grabbing = bool.Parse(force);
+            }
+            catch(ArgumentNullException)
+            {
+                grabbing = !grabbing ;
+            }
+            Engine.Commands.Log((grabbing ? "Started" : "Stopping" )+ " Grabbing...", Color.GreenYellow);
+        }
 
         public override void Load()
         {
@@ -154,18 +147,106 @@ namespace Celeste.Mod.Mia
         bool onVoidLevel = false;
 
 
+
+        private bool tileAtPosition(Level level, Vector2 position)
+        {
+            Vector2 tilePosition = new Vector2((int)position.X / 8, (int)position.Y / 8 - 1);
+            Utils.print(Math.Abs(level.Session.LevelData.TileBounds.X - (int)tilePosition.X),Math.Abs(level.Session.LevelData.TileBounds.Y - (int)tilePosition.Y));
+            char[,] map = level.SolidsData.ToArray();
+            int positionXInArray = Math.Abs(level.TileBounds.X - (int)tilePosition.X);
+            int positionYInArray = Math.Abs(level.TileBounds.Y - (int)tilePosition.Y);
+            return map[positionXInArray,positionYInArray] != '0';
+            
+        }
+
+        /*private void touchWall(Player player,Level level)
+        {
+
+            char[,] map = level.SolidsData.ToArray();
+            Vector2 tilePositionDown = new Vector2((int)player.Position.X/8, (int)player.Position.Y/8);
+            Vector2 tilePositionUp = new Vector2((int)player.Position.X / 8, ((int)player.Position.Y - (int)player.Height)/8);
+            int playerX = Math.Abs(level.TileBounds.X - (int)tilePositionDown.X);
+            int playerY = Math.Abs(level.TileBounds.Y - (int)tilePositionDown.X);
+
+            for (int j = playerY - 10; j < playerY + 10; j++)
+            {
+                for (int i = playerX - 10; i < playerX + 10; i++)
+                {
+                    int incrI = i - (playerX - 10);
+                    int incrJ = j - (playerY - 10);
+                    try
+                    {
+                        if (array[i, j] != '0') tilesAroundPlayer[incrI, incrJ] = 128; //Due to binary representation : Something is 00000000, nothing is 11111111, and there is 126 entities that can be stored. For now, I think it's more than enough.
+                        else tilesAroundPlayer[incrI, incrJ] = 0;
+                    }
+                    catch (IndexOutOfRangeException) { tilesAroundPlayer[incrI, incrJ] = 0; }
+                }
+            }
+            return tilesAroundPlayer;
+
+            Utils.print(tilePositionDown, tilePositionUp);
+        }*/
+        int y = 0;
         
+
+        public bool playerBetweenEntityPositionLeft(Vector2 positionToCheck,  Vector2 position1,Vector2 position2) { //position1.X should be equal to position2.X
+            return ((int)positionToCheck.X - 4 == (int)position1.X && (int)positionToCheck.Y > (int)position1.Y && (int)positionToCheck.Y < (int)position2.Y);
+        }
+
+        public bool playerBetweenEntityPositionRight(Vector2 positionToCheck, Vector2 position1, Vector2 position2)
+        { //position1.X should be equal to position2.X
+            //Utils.print((int)positionToCheck.X + 4 == (int)position1.X);
+            return ((int)positionToCheck.X + 4 == (int)position1.X && (int)positionToCheck.Y > (int)position1.Y && (int)positionToCheck.Y < (int)position2.Y);
+        }
+
+        public bool canPlayerGrab(Player player,Level level)
+        {
+            for (int i = 0; i < level.Entities.Count; i++)
+            {
+                Entity entity = level.Entities[i];
+                float positionX = entity.Position.X;
+                float positionY = entity.Position.Y;
+
+                if (level.Entities[i].HaveComponent("Celeste.LightOcclude")) return
+                        playerBetweenEntityPositionLeft(player.Position, new Vector2(positionX + entity.Width, positionY), new Vector2(positionX + entity.Width, positionY + entity.Height)) ||
+                        playerBetweenEntityPositionLeft(new Vector2(player.Position.X,player.Position.Y - (player.Height/2)), new Vector2(positionX + entity.Width, positionY), new Vector2(positionX + entity.Width, positionY + entity.Height)) ||
+                        playerBetweenEntityPositionLeft(new Vector2(player.Position.X, player.Position.Y - player.Height), new Vector2(positionX + entity.Width, positionY), new Vector2(positionX + entity.Width, positionY + entity.Height)) ||
+                        playerBetweenEntityPositionRight(player.Position, new Vector2(positionX , positionY), new Vector2(positionX + entity.Width, positionY + entity.Height)) ||
+                        playerBetweenEntityPositionRight(new Vector2(player.Position.X, player.Position.Y - (player.Height / 2)), new Vector2(positionX , positionY), new Vector2(positionX + entity.Width, positionY + entity.Height)) ||
+                        playerBetweenEntityPositionRight(new Vector2(player.Position.X, player.Position.Y - player.Height), new Vector2(positionX, positionY), new Vector2(positionX + entity.Width, positionY + entity.Height))
+
+
+
+
+
+
+                        ;
+            }
+            return false;
+        }
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
         {
             float previousStamina = self.Stamina;
             Vector2 previousPosition = self.Position;
+
+            //self.StateMachine.State = index;
             
             orig(self);
-            Utils.print(self.StateMachine.State,self.Dashes > 0);
-
-
             if (Engine.Scene is Level level) 
             {
+                for (int i = 0; i < level.Entities.Count; i++)
+                {
+                    Entity entity = level.Entities[i];
+                    float positionX = entity.Position.X;
+                    float positionY = entity.Position.Y;
+
+                    if (level.Entities[i].HaveComponent("Celeste.LightOcclude")) Utils.print(canPlayerGrab(self,level), new Vector2(level.Entities[i].Position.X, level.Entities[i].Position.Y), new Vector2(level.Entities[i].Position.X, level.Entities[i].Position.Y + level.Entities[i].Height), self.Position, new Vector2(self.Position.X, self.Position.Y - (self.Height / 2)), new Vector2(self.Position.X, self.Position.Y - self.Height));
+                }
+
+                //Utils.print(new Vector2(self.Position.X - 4, self.Position.Y - (int)(self.Height/2)),self.Position,tileAtPosition(level,new Vector2(self.Position.X - 8, self.Position.Y)));
+
+
+
                 if (Settings.GetTiles)
                 {
                     PlayerManager.PlayerManager.ManagePlayer(stopwatch, self, level, previousPosition, onVoidLevel);
@@ -179,11 +260,14 @@ namespace Celeste.Mod.Mia
                 {
                     self.StateMachine.State = 2;
                     self.Dashes--;
-                    Utils.print("MODIFIED");
 
                 }
                 if (self.OnGround() && self.StateMachine.State == 2) dash = false;
                 if(self.StateMachine.State != 2 && dash == true) dash = false;
+
+                if (self.Stamina <= 0 && grabbing) grabbing = false; 
+                if (self.StateMachine.State != 1 && grabbing) grabbing = false;
+                
             }
         }
     }
