@@ -21,39 +21,3 @@ namespace Celeste.Mod.Mia.MiaOptions
         }
     }
 }
-
-
-//switch (action.ToLower())
-//{
-//    case "jump":
-//        Console.WriteLine("Jumpingn...");
-//        player.Jump();
-//        break;
-//    case "dash":
-//        Console.WriteLine("Dashing...");
-//        player.StartDash();
-//        break;
-//    case "grab":
-//        Console.WriteLine("Grabbing...");
-//        player.Holding.Pickup(player);
-//        break;
-//    case "left":
-//        Console.WriteLine("Moving left...");
-//        player.MoveH(-1);
-//        break;
-//    case "right":
-//        Console.WriteLine("Moving right...");
-//        player.MoveH(1);
-//        break;
-//    case "up":
-//        Console.WriteLine("Moving up...");
-//        player.MoveV(-1);
-//        break;
-//    case "down":
-//        Console.WriteLine("Moving down...");
-//        player.MoveV(1);
-//        break;
-//    default:
-//        Console.WriteLine("Unknown action.");
-//        break;
-//}
