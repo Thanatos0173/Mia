@@ -41,7 +41,7 @@ namespace Celeste.Mod.Mia.TileManager
                     int incrJ = j - (playerY - 10);
                     try
                     {
-                        if (array[i, j] != '0') tilesAroundPlayer[incrI, incrJ] = 128; //Due to binary representation : Something is 00000000, nothing is 11111111, and there is 126 entities that can be stored. For now, I think it's more than enough.
+                        if (array[i, j] != '0') tilesAroundPlayer[incrI, incrJ] = 127; //Due to binary representation : Something is 0000000, nothing is 1111111, and there is 125 entities that can be stored. For now, I think it's more than enough.
                         else tilesAroundPlayer[incrI, incrJ] = 0;
                     }
                     catch (IndexOutOfRangeException) { tilesAroundPlayer[incrI, incrJ] = 0; }
