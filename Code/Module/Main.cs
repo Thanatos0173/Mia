@@ -4,17 +4,13 @@ using Microsoft.Xna.Framework;
 
 using Celeste.Mod.Mia.UtilsClass;
 using Celeste.Mod.Mia.Settings;
-using CelesteBot_Everest_Interop;
 
 
 using System.Diagnostics;
-using static IronPython.Modules._ast;
-using System.Windows.Forms;
-using IronPython.Compiler.Ast;
-using WindowsInput.Native;
 using WindowsInput;
-using Celeste.Mia.Test;
 using System.Runtime.InteropServices;
+
+using Celeste.Mod.Mia.InputAdder;
 
 namespace Celeste.Mod.Mia
 {
@@ -44,7 +40,7 @@ namespace Celeste.Mod.Mia
         private static char[,] map;
         private static bool loadMap = false;
 
-        InputSimulator simulator = new InputSimulator();
+    
 
         [Command("left", "Move left")]
         public static void LeftCommand()
@@ -58,10 +54,9 @@ namespace Celeste.Mod.Mia
         [Command("right", "Move right")]
         public static void RightCommand()
         {
-            walkLR = !walkLR;
-            if (walkLR) direction.X = 1;
-            string text = walkLR ? "Starting" : "Stopping";
-            Engine.Commands.Log(text + " right movement...", Color.GreenYellow);
+            bool fileHaveBeenReadSuccesfully = InputAdder.Inputting.moveToRight();
+            if(fileHaveBeenReadSuccesfully) Engine.Commands.Log("Moving Right", Color.GreenYellow);
+            else Engine.Commands.Log("File haven't been succesfully read.", Color.Red);
         }
         [Command("state", "Move right")]
         public static void StateMachineCommand()
@@ -163,79 +158,32 @@ namespace Celeste.Mod.Mia
         }
         bool onVoidLevel = false;
 
-        int j = 0;
+
+ 
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
         {
-            Vector2 previousPosition = self.Position;
-            float previousStamina = self.Stamina;
-            //            Microsoft.Xna.Framework.Input.Buttons.A.
-
-            orig(self);
-            if (Engine.Scene is Level level)
+            try
             {
-
-
-                if (direction.X != 1 && MInput.Keyboard.Pressed(Input.MoveX.Positive.Keyboard[0])) { direction.X = 1; }
-                if (direction.X != -1 && MInput.Keyboard.Pressed(Input.MoveX.Negative.Keyboard[0])) { direction.X = -1; }
-
-                if (Settings.GetTiles)
+                orig(self);
+                if (Engine.Scene is Level level)
                 {
-                    PlayerManager.PlayerManager.ManagePlayer(stopwatch, self, level, previousPosition, onVoidLevel);
-                    TileManager.TileManager.getEntityAroundPlayerAsTiles(level, self);
-                    TileManager.TileManager.getTilesAroundPlayer(level, map, self);
-                    GameWindow window = Engine.Instance.Window;
-                    window.Title = "Celeste.exe/Mia enabled";
-                }
-                if (walkLR) self.MoveH(direction.X);
-                if (walkUD) self.MoveV(direction.Y);
 
-                if (dash && self.Dashes > 0)
-                {
-                    self.StateMachine.State = 2;
-                    self.Dashes--;
+                    if (direction.X != 1 && MInput.Keyboard.Pressed(Input.MoveX.Positive.Keyboard[0])) { direction.X = 1; }
+                    if (direction.X != -1 && MInput.Keyboard.Pressed(Input.MoveX.Negative.Keyboard[0])) { direction.X = -1; }
 
-                }
-
-
-
-
-                if (j == 0)
-                {
-                    if(self.InControl) { 
-                    dash = true;
-                    self.Jump();
-                    Utils.print("UWU");
-                        j = 1;
+                    if (Settings.GetTiles)
+                    {
+                        PlayerManager.PlayerManager.ManagePlayer(stopwatch, self, level, self.Position, onVoidLevel);
+                        TileManager.TileManager.getEntityAroundPlayerAsTiles(level, self);
+                        TileManager.TileManager.getTilesAroundPlayer(level, map, self);
+                        GameWindow window = Engine.Instance.Window;
+                        window.Title = "Celeste.exe/Mia enabled";
                     }
+
                 }
-
-   
-
-
-                //                VirtualButton.KeyboardKey keyboardKey = new VirtualButton.KeyboardKey(Input.Grab);
-                //Input.Grab
-
-                //Utils.print(Input.MoveY.Value);
-                if (grabbing && self.ClimbCheck((int)direction.X) && Input.MoveY.Value == -1f)
-                {
-                    self.MoveV(Input.MoveY.Value);
-                }
-                if (grabbing && self.ClimbCheck((int)direction.X) && self.Stamina > 0)
-                {
-                    self.StateMachine.State = 1;
-                    //    Utils.print("=====================================================================");
-                    //grabbing = false;
-                }
-
-                // Simulating 'U' key press
-                
-                if (self.OnGround() && self.StateMachine.State == 2) dash = false;
-                if (self.StateMachine.State != 2 && dash == true) dash = false;
-                //Utils.print(grabbing,self.StateMachine.State);
-                if (self.Stamina <= 0 && grabbing) grabbing = false;
-                if (self.StateMachine.State != 1 && grabbing) grabbing = false;
-                if (self.Dashes == self.MaxDashes) self.Hair.Color = Settings.GetTiles ? Calc.HexToColor("004d00") : Calc.HexToColor("AC3232");
-
+            }
+            catch (ArgumentOutOfRangeException e) {
+                Console.WriteLine("Exception happened");
             }
         }
     }

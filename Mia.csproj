@@ -90,11 +90,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Module\EntityExtensions.cs" />
     <Compile Include="Code\Module\FileHandling.cs" />
     <Compile Include="Code\Module\FillPlage.cs" />
-    <Compile Include="Code\Module\InputData.cs" />
-    <Compile Include="Code\Module\InputNodes.cs" />
-    <Compile Include="Code\Module\InputPlayer.cs" />
+    <Compile Include="Code\Module\InputAdder.cs" />
     <Compile Include="Code\Module\MiaOptions.cs" />
     <Compile Include="Code\Module\Main.cs" />
     <Compile Include="Code\Module\PlayerManager.cs" />
@@ -102,7 +101,6 @@
     <Compile Include="Code\Module\Test.cs" />
     <Compile Include="Code\Module\TileManager.cs" />
     <Compile Include="Code\Module\Utils.cs" />
-    <Compile Include="EntityExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
