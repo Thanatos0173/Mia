@@ -18,6 +18,7 @@ namespace Celeste.Mod.Mia.MiaOptions
 
             menu.Add(new TextMenu.OnOff("Kill player", Mia.Main.Settings.KillPlayer)
                 .Change(newValue => Mia.Main.Settings.KillPlayer = newValue));
+            
         }
     }
 }

@@ -20,8 +20,10 @@ namespace Celeste.Mod.Mia.EntityExtension
             for (int i = 0; i < lines.Length - 1; i += 2)
             {
                 if (lines[i] == name)
+                {
                     try { return int.Parse(lines[i + 1]); }
                     catch (FormatException) { Console.WriteLine($"{lines[i + 1]} could not be converted to an integer."); }
+                }
             }
             int lastUUID = lines.Length > 0 ? int.Parse(lines[lines.Length - 1]) : 0;
             if (lastUUID + 1 > 126)

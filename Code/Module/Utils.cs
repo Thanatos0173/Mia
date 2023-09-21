@@ -9,7 +9,7 @@ namespace Celeste.Mod.Mia.UtilsClass
 {
     public class Utils
     {
-        public static void print(params object[] arguments)
+        public static void Print(params object[] arguments)
         {
             if (!arguments.Any())
             {
@@ -23,16 +23,16 @@ namespace Celeste.Mod.Mia.UtilsClass
             }
             Logger.Log("Mia", text);
         }
-        public static void printList(List<string> arguments)
+        public static void PrintList(List<string> arguments)
         {
             string text = "";
             foreach (string arg in arguments)
             {
                 text += arg + " ";
             }
-            Utils.print(text);
+            Utils.Print(text);
         }
-        public static void print2dArray(int[,] arguments)
+        public static void Print2dArray(int[,] arguments)
         {
             string text = "\n";
             for(int j = 0;j <arguments.GetLength(1); j++)
@@ -43,7 +43,7 @@ namespace Celeste.Mod.Mia.UtilsClass
                 }
                 text += "\n";
             }
-            Utils.print(text);
+            Utils.Print(text);
 
         }
 

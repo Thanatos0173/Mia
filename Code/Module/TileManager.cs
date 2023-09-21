@@ -7,7 +7,7 @@ namespace Celeste.Mod.Mia.TileManager
 {
     public class TileManager
     {
-        public static int[,] getEntityAroundPlayerAsTiles(Level level, Player player)
+        public static int[,] GetEntityAroundPlayerAsTiles(Level level, Player player)
         {
             int[,] tilesAroundPlayer = new int[20, 20];
             for (int i = 0; i < level.Entities.Count; i++)
@@ -26,7 +26,7 @@ namespace Celeste.Mod.Mia.TileManager
             }
             return tilesAroundPlayer;
         }
-        public static int[,] getTilesAroundPlayer(Level level, char[,] array, Player player)
+        public static int[,] GetTilesAroundPlayer(Level level, char[,] array, Player player)
         {
             int[,] tilesAroundPlayer = new int[20, 20];
             int playerXTile = (int)player.Position.X / 8; //Coordinates on player in tiles
