@@ -7,7 +7,7 @@ namespace Celeste.Mod.Mia.TileManager
 {
     public class TileManager
     {
-        public static int[,] getEntityAroundPlayerAsTiles(Level level, Player player)
+        public static int[,] GetEntityAroundPlayerAsTiles(Level level, Player player)
         {
             int[,] tilesAroundPlayer = new int[20, 20];
             for (int i = 0; i < level.Entities.Count; i++)
@@ -22,11 +22,11 @@ namespace Celeste.Mod.Mia.TileManager
                     int entityTileWidth = (int)entity.Width / 8;
                     int UUID = entity.UUID();
                     tilesAroundPlayer.FillPlage(entityXTiled, entityYTiled, entityTileWidth, entityTileHeight, UUID);
-                    }
+                }
             }
             return tilesAroundPlayer;
         }
-        public static int[,] getTilesAroundPlayer(Level level, char[,] array, Player player)
+        public static int[,] GetTilesAroundPlayer(Level level, char[,] array, Player player)
         {
             int[,] tilesAroundPlayer = new int[20, 20];
             int playerXTile = (int)player.Position.X / 8; //Coordinates on player in tiles
@@ -49,6 +49,27 @@ namespace Celeste.Mod.Mia.TileManager
                 }
             }
             return tilesAroundPlayer;
+        }
+
+        public static int[,] FusedArrays(Level level, char[,] array, Player player)
+        {
+            int[,] entityArray = GetEntityAroundPlayerAsTiles(level, player);
+            int[,] tilesArray = GetTilesAroundPlayer(level, array, player);
+
+            int[,] globalTiles = new int[20, 20];
+            for (int j = 0; j < 20; j++)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+                    if (entityArray[i, j] == 0) //There is no entity in that tile
+                    {
+                        globalTiles[i, j] = tilesArray[i, j];
+                    }
+                    else globalTiles[i, j] = entityArray[i, j];
+                }
+            }
+            return globalTiles;
+
         }
     }
 }

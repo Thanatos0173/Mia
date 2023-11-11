@@ -12,6 +12,7 @@ namespace Celeste.Mod.Mia.Settings
 
         public bool Debug { get; set; } = false;
         public bool GetTiles { get; set; } = false;
+        public bool SendRequests { get; set; } = false;
         public void CreateIdleTimeEntry(TextMenu menu, bool inGame)
         {
             menu.Add(new TextMenu.Button("Idle Time Manager")
@@ -29,7 +30,11 @@ namespace Celeste.Mod.Mia.Settings
                 .Change(newValue => Mia.Main.Settings.GetTiles = newValue));
         }
 
-
+        public void CreateSendRequestsEntry(TextMenu menu, bool inGame)
+        {
+            menu.Add(new TextMenu.OnOff("Send requests", Mia.Main.Settings.SendRequests)
+                .Change(newValue => Mia.Main.Settings.SendRequests = newValue));
+        }
     }
 }
 

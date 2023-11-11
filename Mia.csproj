@@ -72,9 +72,25 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="NumSharp, Version=0.30.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\NumSharp.0.30.0\lib\netstandard2.0\NumSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -90,17 +106,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Code\Module\CutomMatrix.cs" />
+    <Compile Include="Code\Module\DrawTiles.cs" />
     <Compile Include="Code\Module\EntityExtensions.cs" />
     <Compile Include="Code\Module\FileHandling.cs" />
     <Compile Include="Code\Module\FillPlage.cs" />
+    <Compile Include="Code\Module\FirstLayers.cs" />
     <Compile Include="Code\Module\InputAdder.cs" />
+    <Compile Include="Code\Module\LastLayer.cs" />
     <Compile Include="Code\Module\MiaOptions.cs" />
     <Compile Include="Code\Module\Main.cs" />
+    <Compile Include="Code\Module\NeuralNetwork.cs" />
     <Compile Include="Code\Module\PlayerManager.cs" />
     <Compile Include="Code\Module\Settings.cs" />
     <Compile Include="Code\Module\Test.cs" />
     <Compile Include="Code\Module\TileManager.cs" />
     <Compile Include="Code\Module\Utils.cs" />
+    <Compile Include="Code\Module\window.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

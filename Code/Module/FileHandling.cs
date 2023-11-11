@@ -31,7 +31,7 @@ namespace Celeste.Mod.Mia.FileHandling
             string tilesFile = LoadFile(path)[0];
             System.IO.File.WriteAllText(Environment.CurrentDirectory + tilesFile + @"\current.npy", tiles);
  
-            Utils.print(Environment.CurrentDirectory + tilesFile);
+            Utils.Print(Environment.CurrentDirectory + tilesFile);
         }
     }
     
