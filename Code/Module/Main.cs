@@ -21,8 +21,6 @@ using System.Net.Sockets;
 using System.Text;
 using IronPython.Runtime.Operations;
 
-using Celeste.Mod.Mia.Layers;
-using Celeste.Mod.Mia.Custom;
 
 namespace Celeste.Mod.Mia
 {
@@ -119,36 +117,6 @@ namespace Celeste.Mod.Mia
                     if (Settings.GetTiles) window.Title = "Celeste.exe/Mia enabled";
                     else window.Title = "Celeste.exe/Mia not enabled";
 
-                    CustomMatrix matrix1 = new CustomMatrix {  
-                        List = new List<List<float>> { new List<float>{ 10, 20, 30 }, new List<float> { 4, 5, 6 }, new List<float> { 7, 8, 9 } },
-                        I = 3,
-                        J = 3
-
-                    } ;
-                    
-                    string s = "1\n";
-                    
-                    for (int i = 0; i < 3; i++)
-                    {
-                        for(int j = 0; j < 3; j++) {
-                            s += CustomMatrix.GetValue(matrix1, i, j) + "|";
-                        }
-                        s += "\n";
-                    }
-                    Console.WriteLine(s);
-
-                    FirstLayers.Edit(matrix1);
-
-                    s = "2\n";
-                    for (int i = 0; i < 3; i++)
-                    {
-                        for (int j = 0; j < 3; j++)
-                        {
-                            s += CustomMatrix.GetValue(matrix1, i, j) + "|";
-                        }
-                        s += "\n";
-                    }
-                    Console.WriteLine(s);
                 }
         }
     }

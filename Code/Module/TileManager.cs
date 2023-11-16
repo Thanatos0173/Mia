@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Monocle;
 using Celeste.Mod.Mia.Plage;
 using Celeste.Mod.Mia.EntityExtension;

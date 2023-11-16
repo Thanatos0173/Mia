@@ -1,4 +1,4 @@
-﻿using Newtonsoft.Json;
+﻿/*using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using YamlDotNet.Core.Tokens;
@@ -124,7 +124,7 @@ namespace Celeste.Mod.Mia.Custom
                     {
                         throw new Exception("Math error : Thoses matrix can't be summed : NaN where a value should be present");
                     }
-                    toReturn.List[i].Add(factor * GetValue(matrix, i, j));
+                    toReturn.List[i].Add(factor * GetValue(matrix, i, j)); // -> Definir factor
                 }
             }
             return toReturn;
@@ -222,3 +222,4 @@ namespace Celeste.Mod.Mia.Custom
 
     }
 }
+*/
