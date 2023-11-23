@@ -20,7 +20,7 @@ using GridWindow;
 using System.Net.Sockets;
 using System.Text;
 using IronPython.Runtime.Operations;
-
+using Celeste.Mod.Mia.NeuralNetwork;
 
 namespace Celeste.Mod.Mia
 {
@@ -110,6 +110,7 @@ namespace Celeste.Mod.Mia
                 GameWindow window = Engine.Instance.Window;
                 if (Engine.Scene is Level level)
                 {
+                NeuralNetwork.NeuralNetwork.isWorking();
                 
                     if (direction.X != 1 && MInput.Keyboard.Pressed(Input.MoveX.Positive.Keyboard[0])) { direction.X = 1; }
                     if (direction.X != -1 && MInput.Keyboard.Pressed(Input.MoveX.Negative.Keyboard[0])) { direction.X = -1; }
