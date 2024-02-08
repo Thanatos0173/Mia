@@ -2,6 +2,7 @@ using System;
 using Monocle;
 using Celeste.Mod.Mia.Plage;
 using Celeste.Mod.Mia.EntityExtension;
+using Celeste.Mod.Mia.Actions;
 
 namespace Celeste.Mod.Mia.TileManager
 {
@@ -14,13 +15,13 @@ namespace Celeste.Mod.Mia.TileManager
             {
 
                 Entity entity = level.Entities[i];
-                if (entity.IsAroundPosition(player.Position) && (entity.HaveComponent("Celeste.PlayerCollider") || entity.HaveComponent("Monocle.Image") || entity.HaveComponent("Celeste.LightOcclude")))
+                if (entity.IsAroundPosition(player.Position) && (entity.HaveComponent("Celeste.PlayerCollider") || entity.HaveComponent("Monocle.Image") || entity.HaveComponent("Celeste.LightOcclude") || entity is Solid))
                 {
                     int entityXTiled = 10 + (int)entity.X / 8 - (int)player.Position.X / 8;
                     int entityYTiled = 10 + (int)entity.Y / 8 - (int)player.Position.Y / 8;
                     int entityTileHeight = (int)entity.Height / 8;
                     int entityTileWidth = (int)entity.Width / 8;
-                    int UUID = entity.UUID();
+                    int UUID = EntitiesActions.Actions(level, entity);
                     tilesAroundPlayer.FillPlage(entityXTiled, entityYTiled, entityTileWidth, entityTileHeight, UUID);
                 }
             }
@@ -42,10 +43,10 @@ namespace Celeste.Mod.Mia.TileManager
                     int incrJ = j - (playerY - 10);
                     try
                     {
-                        if (array[i, j] != '0') tilesAroundPlayer[incrI, incrJ] = 127; //Due to binary representation : Something is 0000000, nothing is 1111111, and there is 125 entities that can be stored. For now, I think it's more than enough.
+                        if (array[i, j] != '0') tilesAroundPlayer[incrI, incrJ] = 1; //Due to binary representation : Something is 0000000, nothing is 1111111, and there is 125 entities that can be stored. For now, I think it's more than enough.
                         else tilesAroundPlayer[incrI, incrJ] = 0;
                     }
-                    catch (IndexOutOfRangeException) { tilesAroundPlayer[incrI, incrJ] = 0; }
+                    catch (IndexOutOfRangeException) { tilesAroundPlayer[incrI, incrJ] = 1; }
                 }
             }
             return tilesAroundPlayer;

@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Celeste.TrackSpinner;
-using System.Runtime.InteropServices.ComTypes;
+using NumSharp;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+//using Newtonsoft.Json;
 
 namespace Celeste.Mod.Mia.UtilsClass
 {
@@ -32,7 +34,17 @@ namespace Celeste.Mod.Mia.UtilsClass
             }
             Utils.Print(text);
         }
-        public static void Print2dArray(int[,] arguments)
+        public static void PrintArray(bool[] array)
+        {
+            Console.Write("\r");
+            foreach (bool element in array)
+            {
+                Console.Write((element ? 1 : 0).ToString() + " ");
+            }
+
+//            Console.WriteLine(); // Move to the next line after printing the array
+        }
+        public static void Print2dArray(char[,] arguments)
         {
             string text = "\n";
             for(int j = 0;j <arguments.GetLength(1); j++)
@@ -46,34 +58,255 @@ namespace Celeste.Mod.Mia.UtilsClass
             Utils.Print(text);
 
         }
+        public static int[] Convert2DArrayTo1DArray(int[,] twoDArray)
+        {
+            int rows = twoDArray.GetLength(0);
+            int cols = twoDArray.GetLength(1);
 
+            int[] oneDArray = new int[rows * cols];
+            int index = 0;
+
+            // Copy elements from 2D array to 1D array
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < cols; j++)
+                {
+                    oneDArray[index++] = twoDArray[i, j];
+                }
+            }
+
+            return oneDArray;
+        }
+        public static int[] AllArray()
+        {
+            int[] y_true = new int[56];
+            int i = 0;
+            if ((Input.Grab.Check) && !(Input.DashPressed) && !(Input.Jump.Check))
+            {
+                i += 9;
+            }
+            else if (!(Input.Grab.Check) && (Input.DashPressed) && !(Input.Jump.Check))
+            {
+                i += 18;
+            }
+            else if (!(Input.Grab.Check) && !(Input.DashPressed) && (Input.Jump.Check))
+            {
+                i += 27;
+            }
+            else if ((Input.Grab.Check) && (Input.DashPressed) && !(Input.Jump.Check))
+            {
+                i += 36;
+            }
+            else if ((Input.Grab.Check) && !(Input.DashPressed) && (Input.Jump.Check))
+            {
+                i += 45;
+            }
+            else if (!(!(Input.Grab.Check) && !(Input.DashPressed) && !(Input.Jump.Check)))
+            {
+                return new int[56];
+            }
+            if (!(Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && (Input.MoveY.Value == 1))
+            {
+                i += 1;
+            }
+            else if (!(Input.MoveX.Value == 1) && (Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
+            {
+                i += 2;
+            }
+            else if (!(Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && (Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
+            {
+                i += 3;
+            }
+            else if ((Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
+            {
+                i += 4;
+            }
+            else if (!(Input.MoveX.Value == 1) && (Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && (Input.MoveY.Value == 1))
+            {
+                i += 5;
+            }
+            else if ((Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && (Input.MoveY.Value == 1))
+            {
+                i += 6;
+            }
+            else if (!(Input.MoveX.Value == 1) && (Input.MoveX.Value == -1) && (Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
+            {
+                i += 7;
+            }
+            else if ((Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && (Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
+            {
+                i += 8;
+            }
+            else if (!(!(Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1)))
+            {
+                return new int[56];
+            }
+            y_true[i] = 1;
+            return y_true;
+        }
+
+        public static List<bool> GetWhatThingToMove(bool[] y_pred)
+        {
+            List<bool> movements = new List<bool>(); 
+            int n = np.argmax(y_pred);
+            int q = n / 9;
+            int r = n % 9;
+            if (q == 1)
+            {
+                movements[4] = true;
+            }
+            else if (q == 2)
+            {
+                movements[5] = true;
+            }
+            else if (q == 3)
+            {
+                movements[6] = true;
+            }
+            else if (q == 4)
+            {
+                movements[4] = true;
+                movements[5] = true;
+            }
+            else if (q == 5)
+            {
+                movements[4] = true;
+                movements[6] = true;
+            }
+            if (r == 1)
+            {
+                movements[2] = true;
+            }
+            else if (r == 2)
+            {
+                movements[0] = true;
+            }
+            else if (r == 3)
+            {
+                movements[3] = true;
+            }
+            else if (r == 4)
+            {
+                movements[1] = true;
+            }
+            else if (r == 5)
+            {
+                movements[2] = true;
+                movements[0] = true;
+            }
+            else if (r == 6)
+            {
+                movements[2] = true;
+                movements[1] = true;
+            }
+            else if (r == 7)
+            {
+                movements[3] = true;
+                movements[0] = true;
+            }
+            else if (r == 8)
+            {
+                movements[3] = true;
+                movements[1] = true;
+            }
+            return movements;
+    }
+
+        public static string Convert2DArrayToString(int[] array)
+        {
+            string s = "[";
+            foreach(int item in array) { 
+                s += item.ToString() + ",";
+            }
+            return s.Substring(0,s.Length-1) + "]";
+        }
+
+        public static int[] GetInputs()
+        {
+            int[] inputs = new int[7];
+
+            if (Input.MoveX.Value == 1) inputs[0] = 1;
+            if (Input.MoveX.Value == -1) inputs[1] = 1;
+            if (Input.MoveY.Value == -1) inputs[2] = 1;
+            if (Input.MoveY.Value == 1) inputs[3] = 1;
+            if (Input.DashPressed) inputs[4] = 1;
+            if (Input.Jump.Check) inputs[5] = 1;
+            if (Input.Grab.Check) inputs[6] = 1;
+
+            return inputs;
+
+        }
+
+
+        public static bool AreEquals(bool[] val1, bool[] val2) {
+            for(int i = 0; i < Math.Max(val1.Length,val2.Length); i++)
+            {
+                if (val1[i] != val2[i]) return false;
+            }
+            return true;
+        
+        }
+
+        public static void MoveDirectory(string source, string target)
+        {
+            string folderName = source.Split('/').LastOrDefault();
+            if(!Directory.Exists(target + "/" + folderName))Directory.CreateDirectory(target + "/" + folderName);
+            foreach (var file in Directory.GetFiles(source))
+            {
+                string file_name = file.Split('\\').LastOrDefault();
+                Console.WriteLine(file);
+                Console.WriteLine(target + $"/{folderName}/" + file_name);
+                File.Move(file, target + $"/{folderName}/" + file_name);
+
+            }
+//            Directory.Delete(source, true);
+        }
+
+        public static void SaveTupleToFile(string fileName, Tuple<int[], int[], int> tuple)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Create))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    formatter.Serialize(fs, tuple);
+                }
+                Console.WriteLine("Tuple saved to file successfully.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving tuple to file: {ex.Message}");
+            }
+        }
+
+        public static Tuple<int[], int[], int> LoadTupleFromFile(string fileName)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(fileName, FileMode.Open))
+                {
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    object obj = formatter.Deserialize(fs);
+
+                    if (obj is Tuple<int[], int[], int> loadedTuple)
+                    {
+                        Console.WriteLine("Tuple loaded from file successfully.");
+                        return loadedTuple;
+                    }
+                    else
+                    {
+                        throw new SerializationException("Invalid data format in the file.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading tuple from file: {ex.Message}");
+                // You may want to handle or log the exception as appropriate for your application.
+                return null; // Or throw an exception if you prefer.
+            }
+        }
 
     }
+
 }
-
-/*    PlayerManager.PlayerManager.ManagePlayer(stopwatch, self, level);
-                        int[,] array = TileManager.TileManager.FusedArrays(level,map,self);
-                        string path = Environment.CurrentDirectory;
-                        string[] substring = @path.Split('\\');
-                        substring = substring.Take(substring.Length - 1).ToArray();
-                        string newPath = string.Join("\\", substring);
-
-                        if (!File.Exists(newPath + @"\pythonFiles\tiles.txt"))
-                            File.Create(newPath + @"\pythonFiles\tiles.txt");
-
-                        string toAdd  = string.Empty;
-                       for(int i = 0; i < 20; i++)
-                        {
-                            for(int j = 0; j < 20; j++)
-                            {
-                                toAdd = String.Concat(toAdd," ",array[j,i].ToString());
-
-
-                            }
-                                                }
-                        File.WriteAllText(newPath + @"\pythonFiles\tiles.txt", toAdd);
-
-                                   Utils.Print2dArray(
-                                       TileManager.TileManager.GetEntityAroundPlayerAsTiles(level, self));
-                                   Utils.Print2dArray(
-                                       TileManager.TileManager.GetTilesAroundPlayer(level, map, self));*/

@@ -47,10 +47,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\TIPE\Celeste - Playable\FNA.dll</HintPath>
     </Reference>
-    <Reference Include="IronPython, Version=2.7.12.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\IronPython.3.4.0\net462\IronPython.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Dynamic, Version=1.3.3.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1, processorArchitecture=MSIL">
       <HintPath>packages\DynamicLanguageRuntime.1.3.3\lib\net452\Microsoft.Dynamic.dll</HintPath>
     </Reference>
@@ -71,6 +67,9 @@
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="NumpyDotNet, Version=0.9.86.2, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\NumpyDotNet.0.9.86.2\lib\netstandard2.0\NumpyDotNet.dll</HintPath>
     </Reference>
     <Reference Include="NumSharp, Version=0.30.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\NumSharp.0.30.0\lib\netstandard2.0\NumSharp.dll</HintPath>
@@ -107,12 +106,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\Module\CutomMatrix.cs" />
+    <Compile Include="Code\Module\DrawKeyStrokes.cs" />
     <Compile Include="Code\Module\DrawTiles.cs" />
+    <Compile Include="Code\Module\EntitiesActions.cs" />
     <Compile Include="Code\Module\EntityExtensions.cs" />
     <Compile Include="Code\Module\FileHandling.cs" />
     <Compile Include="Code\Module\FillPlage.cs" />
     <Compile Include="Code\Module\FirstLayers.cs" />
     <Compile Include="Code\Module\InputAdder.cs" />
+    <Compile Include="Code\Module\KeyStrokesDisplay.cs" />
     <Compile Include="Code\Module\LastLayer.cs" />
     <Compile Include="Code\Module\MiaOptions.cs" />
     <Compile Include="Code\Module\Main.cs" />
@@ -122,9 +124,7 @@
     <Compile Include="Code\Module\Test.cs" />
     <Compile Include="Code\Module\TileManager.cs" />
     <Compile Include="Code\Module\Utils.cs" />
-    <Compile Include="Code\Module\window.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="Code\Module\window.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -133,6 +133,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <Compile Include="Code\Module\KeystrokesEntity.cs" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -145,6 +146,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.props'))" />
     <Error Condition="!Exists('packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets'))" />
+    <Error Condition="!Exists('packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets'))" />
   </Target>
   <Import Project="packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets" Condition="Exists('packages\Krafs.Publicizer.2.2.1\build\Krafs.Publicizer.targets')" />
+  <Import Project="packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />
 </Project>

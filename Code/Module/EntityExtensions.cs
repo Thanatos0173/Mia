@@ -9,6 +9,7 @@ namespace Celeste.Mod.Mia.EntityExtension
     {
         public static int UUID(this Entity entity) /// Assign UUID to entity if non-existing UUID and return it as a int between 0 and 126
         {
+
             string name = entity.ToString();
             string newPath = Environment.CurrentDirectory + @"\Mia";
             if (!Directory.Exists(newPath))
