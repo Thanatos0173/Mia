@@ -1,0 +1,172 @@
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Microsoft.Dynamic.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Microsoft.Scripting.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Microsoft.Scripting.Metadata.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\MonoMod.RuntimeDetour.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Newtonsoft.Json.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\YamlDotNet.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\MonoMod.exe
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Jdenticon.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Mono.Cecil.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\MAB.DotIgnore.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\DotNetZip.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\NLua.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Mono.Cecil.Mdb.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Mono.Cecil.Pdb.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Memory.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\KeraLua.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Numerics.Vectors.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Buffers.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Celeste.pdb
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Celeste.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\FNA.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\FNA.dll.config
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Microsoft.Dynamic.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Microsoft.Scripting.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Microsoft.Scripting.Metadata.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\obj\Release\Mia.csproj.AssemblyReference.cache
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\obj\Release\Mia.csproj.CoreCompileInputs.cache
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\obj\Release\Mia.csproj.CopyComplete
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Mia.dll.config
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Mia.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Mia.pdb
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\obj\Release\Mia.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\obj\Release\Mia.pdb
+F:\Mia\DLL\Mia.dll.config
+F:\Mia\DLL\Mia.dll
+F:\Mia\DLL\Mia.pdb
+F:\Mia\DLL\Microsoft.Dynamic.dll
+F:\Mia\DLL\Microsoft.Scripting.dll
+F:\Mia\DLL\Microsoft.Scripting.Metadata.dll
+F:\Mia\DLL\MonoMod.exe
+F:\Mia\DLL\Jdenticon.dll
+F:\Mia\DLL\Mono.Cecil.dll
+F:\Mia\DLL\MAB.DotIgnore.dll
+F:\Mia\DLL\DotNetZip.dll
+F:\Mia\DLL\NLua.dll
+F:\Mia\DLL\Mono.Cecil.Mdb.dll
+F:\Mia\DLL\Mono.Cecil.Pdb.dll
+F:\Mia\DLL\System.Memory.dll
+F:\Mia\DLL\System.Runtime.CompilerServices.Unsafe.dll
+F:\Mia\DLL\KeraLua.dll
+F:\Mia\DLL\System.Numerics.Vectors.dll
+F:\Mia\DLL\System.Buffers.dll
+F:\Mia\DLL\Celeste.pdb
+F:\Mia\DLL\Celeste.xml
+F:\Mia\DLL\FNA.xml
+F:\Mia\DLL\FNA.dll.config
+F:\Mia\DLL\IronPython.xml
+F:\Mia\DLL\Microsoft.Dynamic.xml
+F:\Mia\DLL\Microsoft.Scripting.xml
+F:\Mia\DLL\Microsoft.Scripting.Metadata.xml
+F:\Mia\obj\Release\Mia.csproj.AssemblyReference.cache
+F:\Mia\obj\Release\Mia.csproj.CoreCompileInputs.cache
+F:\Mia\obj\Release\Mia.csproj.CopyComplete
+F:\Mia\obj\Release\Mia.dll
+F:\Mia\obj\Release\Mia.pdb
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\WindowsInput.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\WindowsInput.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.InteropServices.RuntimeInformation.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\Microsoft.Win32.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\netstandard.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.AppContext.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Collections.Concurrent.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Collections.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Collections.NonGeneric.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Collections.Specialized.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.ComponentModel.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.ComponentModel.EventBasedAsync.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.ComponentModel.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.ComponentModel.TypeConverter.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Console.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Data.Common.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.Contracts.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.Debug.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.FileVersionInfo.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.Process.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.StackTrace.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.TextWriterTraceListener.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.Tools.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.TraceSource.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Diagnostics.Tracing.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Drawing.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Dynamic.Runtime.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Globalization.Calendars.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Globalization.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Globalization.Extensions.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.Compression.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.Compression.ZipFile.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.FileSystem.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.FileSystem.DriveInfo.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.FileSystem.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.FileSystem.Watcher.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.IsolatedStorage.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.MemoryMappedFiles.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.Pipes.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.IO.UnmanagedMemoryStream.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Linq.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Linq.Expressions.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Linq.Parallel.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Linq.Queryable.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.Http.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.NameResolution.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.NetworkInformation.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.Ping.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.Requests.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.Security.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.Sockets.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.WebHeaderCollection.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.WebSockets.Client.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Net.WebSockets.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.ObjectModel.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Reflection.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Reflection.Extensions.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Reflection.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Resources.Reader.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Resources.ResourceManager.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Resources.Writer.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.CompilerServices.VisualC.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.Extensions.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.Handles.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.InteropServices.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.Numerics.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.Serialization.Formatters.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.Serialization.Json.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.Serialization.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.Serialization.Xml.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.Claims.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.Cryptography.Algorithms.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.Cryptography.Csp.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.Cryptography.Encoding.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.Cryptography.Primitives.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.Cryptography.X509Certificates.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.Principal.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Security.SecureString.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Text.Encoding.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Text.Encoding.Extensions.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Text.RegularExpressions.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Threading.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Threading.Overlapped.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Threading.Tasks.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Threading.Tasks.Parallel.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Threading.Thread.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Threading.ThreadPool.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Threading.Timer.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.ValueTuple.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Xml.ReaderWriter.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Xml.XDocument.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Xml.XmlDocument.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Xml.XmlSerializer.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Xml.XPath.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Xml.XPath.XDocument.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\NumSharp.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\NumSharp.pdb
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Buffers.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Memory.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Numerics.Vectors.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\System.Runtime.CompilerServices.Unsafe.xml
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\NumpyDotNet.dll
+C:\Users\elioo\OneDrive\Bureau\TIPE\Celeste - Playable\Mods\Mia\DLL\NumpyDotNet.xml

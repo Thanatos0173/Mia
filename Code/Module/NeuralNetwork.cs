@@ -323,6 +323,7 @@ namespace Celeste.Mod.Mia.NeuralNetwork
         public static NDArray ForPropagation(NDArray input)
         {
             nn.Item1[0].Forward(input);
+            Console.WriteLine(nn.Item1.Count);
             for (int i = 1; i < nn.Item1.Count; i++) // Adding all the values inside of FirstLayer
             {
                 nn.Item1[i].Forward(nn.Item1[i - 1].output);
