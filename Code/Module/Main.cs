@@ -75,19 +75,28 @@ namespace Celeste.Mod.Mia
 
             }
             Settings.GetTiles = !Settings.GetTiles;
-            if(Settings.GetTiles) 
+            try
             {
-                NeuralNetwork.NeuralNetwork.Open();
+                if (Settings.GetTiles)
+                {
+                    NeuralNetwork.NeuralNetwork.Open();
+                }
+                else NeuralNetwork.NeuralNetwork.Save();
+                Engine.Commands.Log(" Mia is now " + (Settings.GetTiles ? "enable. " : "disable."), Color.GreenYellow);
+                if (!doPlay)
+                {
+                    Engine.Commands.Log("Mia is in mode Train. That mean that by playing normally the game, she will train by herself. To put it in play mode, you need to type the command \"switch\"");
+                }
+                else
+                {
+                    Engine.Commands.Log("Mia is in mode Play. That mean that she will play by herself. To put it in train mode, you need to type the command \"switch\"");
+                }
             }
-            else NeuralNetwork.NeuralNetwork.Save();
-            Engine.Commands.Log(" Mia is now " + (Settings.GetTiles ? "enable. " : "disable."), Color.GreenYellow);
-            if (!doPlay)
+            catch(Exception ex) 
             {
-                Engine.Commands.Log("Mia is in mode Train. That mean that by playing normally the game, she will train by herself. To put it in play mode, you need to type the command \"switch\"");
-            }
-            else
-            {
-                Engine.Commands.Log("Mia is in mode Play. That mean that she will play by herself. To put it in train mode, you need to type the command \"switch\"");
+                Engine.Commands.Log("An error ocured.");
+                Engine.Commands.Log("The problem might be that you haven't created the neural network");
+                Engine.Commands.Log("If you have created it, you might want to contact Thanatos_0173 on GitHub.");
             }
 
         }
@@ -221,11 +230,7 @@ namespace Celeste.Mod.Mia
                     else
                         {
                             bool[] movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
-                            foreach(bool b in movements)
-                            {
-                                Console.Write(b.ToString() + " ");
-                            }
-                            Console.WriteLine();
+                            
                             Inputting.Move(movements);
                         }   
                 }

@@ -99,17 +99,11 @@ namespace Celeste.Mod.Mia.NeuralNetwork
         {
                 if (!File.Exists(filePath))
                 {
-                    Console.WriteLine("UwU2");
                     // Create the file and close it immediately
                     using (FileStream fs = File.Create(filePath)) { }
                     
                 }
-                else
-                {
-                    Console.WriteLine("UwU");
-                    throw new FileExist();
 
-                }
         }
         public static void Open()
         {
@@ -166,17 +160,18 @@ namespace Celeste.Mod.Mia.NeuralNetwork
             {
                 command.Log("Some directories already exist.");
                 command.Log("The old structure will be saved, and a new one will be created");
+                DateTime currentDateTime = DateTime.Now;
+
+                string currentDate = currentDateTime.ToString("yyyyMMdd");
+                string currentTime = currentDateTime.ToString("HHmmss");
+
+                Directory.CreateDirectory($"Mia/mia_save{currentDate}_{currentTime}");
+
+                Utils.MoveDirectoryAndDeleteOld("Mia/weights", $"Mia/mia_save{currentDate}_{currentTime}");
+                Utils.MoveDirectoryAndDeleteOld("Mia/biases", $"Mia/mia_save{currentDate}_{currentTime}");
+
             }
 
-            DateTime currentDateTime = DateTime.Now;
-
-            string currentDate = currentDateTime.ToString("yyyyMMdd");
-            string currentTime = currentDateTime.ToString("HHmmss");
-
-            Directory.CreateDirectory($"Mia/mia_save{currentDate}_{currentTime}");
-
-            Utils.MoveDirectoryAndDeleteOld("Mia/weights", $"Mia/mia_save{currentDate}_{currentTime}");
-            Utils.MoveDirectoryAndDeleteOld("Mia/biases", $"Mia/mia_save{currentDate}_{currentTime}");
 
             Directory.CreateDirectory("Mia/weights");
             Directory.CreateDirectory("Mia/biases");

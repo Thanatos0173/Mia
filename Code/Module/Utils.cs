@@ -254,8 +254,6 @@ namespace Celeste.Mod.Mia.UtilsClass
             foreach (var file in Directory.GetFiles(source))
             {
                 string file_name = file.Split('\\').LastOrDefault();
-                Console.WriteLine(file);
-                Console.WriteLine(target + $"/{folderName}/" + file_name);
                 File.Copy(file, target + $"/{folderName}/" + file_name);
 
             }
@@ -269,58 +267,13 @@ namespace Celeste.Mod.Mia.UtilsClass
             foreach (var file in Directory.GetFiles(source))
             {
                 string file_name = file.Split('\\').LastOrDefault();
-                Console.WriteLine(file);
-                Console.WriteLine(target + $"/{folderName}/" + file_name);
                 File.Copy(file, target + $"/{folderName}/" + file_name);
                 File.Delete(file);
             }
             Directory.Delete(source,true);
         }
 
-        public static void SaveTupleToFile(string fileName, Tuple<int[], int[], int> tuple)
-        {
-            try
-            {
-                using (FileStream fs = new FileStream(fileName, FileMode.Create))
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    formatter.Serialize(fs, tuple);
-                }
-                Console.WriteLine("Tuple saved to file successfully.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving tuple to file: {ex.Message}");
-            }
-        }
-
-        public static Tuple<int[], int[], int> LoadTupleFromFile(string fileName)
-        {
-            try
-            {
-                using (FileStream fs = new FileStream(fileName, FileMode.Open))
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    object obj = formatter.Deserialize(fs);
-
-                    if (obj is Tuple<int[], int[], int> loadedTuple)
-                    {
-                        Console.WriteLine("Tuple loaded from file successfully.");
-                        return loadedTuple;
-                    }
-                    else
-                    {
-                        throw new SerializationException("Invalid data format in the file.");
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error loading tuple from file: {ex.Message}");
-                // You may want to handle or log the exception as appropriate for your application.
-                return null; // Or throw an exception if you prefer.
-            }
-        }
+        
 
     }
 
