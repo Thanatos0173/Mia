@@ -169,10 +169,10 @@ namespace Celeste.Mod.Mia
         private void AddEntity(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
         {
             orig(self, playerIntro, isFromLoader);
-            if (self.Tracker.GetEntity<Player>() != null)
+            /*if (self.Tracker.GetEntity<Player>() != null)
             {
                 self.Add(new KeyStokesEntity());
-            }
+            }*/
             
         }
 
