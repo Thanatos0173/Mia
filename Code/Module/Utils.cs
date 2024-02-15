@@ -145,9 +145,9 @@ namespace Celeste.Mod.Mia.UtilsClass
             return y_true;
         }
 
-        public static List<bool> GetWhatThingToMove(bool[] y_pred)
+        public static bool[] GetWhatThingToMove(NDArray y_pred)
         {
-            List<bool> movements = new List<bool>(); 
+            bool[] movements = new bool[7]; 
             int n = np.argmax(y_pred);
             int q = n / 9;
             int r = n % 9;
@@ -247,7 +247,7 @@ namespace Celeste.Mod.Mia.UtilsClass
         
         }
 
-        public static void MoveDirectory(string source, string target)
+        public static void CopyDirectory(string source, string target)
         {
             string folderName = source.Split('/').LastOrDefault();
             if(!Directory.Exists(target + "/" + folderName))Directory.CreateDirectory(target + "/" + folderName);
@@ -256,10 +256,25 @@ namespace Celeste.Mod.Mia.UtilsClass
                 string file_name = file.Split('\\').LastOrDefault();
                 Console.WriteLine(file);
                 Console.WriteLine(target + $"/{folderName}/" + file_name);
-                File.Move(file, target + $"/{folderName}/" + file_name);
+                File.Copy(file, target + $"/{folderName}/" + file_name);
 
             }
-//            Directory.Delete(source, true);
+        }
+
+
+        public static void MoveDirectoryAndDeleteOld(string source, string target)
+        {
+            string folderName = source.Split('/').LastOrDefault();
+            if (!Directory.Exists(target + "/" + folderName)) Directory.CreateDirectory(target + "/" + folderName);
+            foreach (var file in Directory.GetFiles(source))
+            {
+                string file_name = file.Split('\\').LastOrDefault();
+                Console.WriteLine(file);
+                Console.WriteLine(target + $"/{folderName}/" + file_name);
+                File.Copy(file, target + $"/{folderName}/" + file_name);
+                File.Delete(file);
+            }
+            Directory.Delete(source,true);
         }
 
         public static void SaveTupleToFile(string fileName, Tuple<int[], int[], int> tuple)

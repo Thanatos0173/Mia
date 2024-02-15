@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Celeste.Mod.Mia;
+using Celeste.Mod.Mia.Code.Exceptions;
+using Celeste.Mod.Mia.UtilsClass;
 
 namespace Celeste.Mod.Mia.NeuralNetwork
 {
@@ -95,19 +97,19 @@ namespace Celeste.Mod.Mia.NeuralNetwork
 
         private static void CreateFileIfNotExist(string filePath)
         {
-            try
-            {
                 if (!File.Exists(filePath))
                 {
+                    Console.WriteLine("UwU2");
                     // Create the file and close it immediately
                     using (FileStream fs = File.Create(filePath)) { }
                     
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error creating file {filePath}: {ex.Message}");
-            }
+                else
+                {
+                    Console.WriteLine("UwU");
+                    throw new FileExist();
+
+                }
         }
         public static void Open()
         {
@@ -143,9 +145,9 @@ namespace Celeste.Mod.Mia.NeuralNetwork
 
         }
 
-        public static void Create(int[] npc, Monocle.Commands command)
+        public static void Create(List<int> npc, Monocle.Commands command)
         {
-            int n = npc.Length;
+            int n = npc.Count;
             // Adjust the info object to be a more straightforward structure.
             // Since it's a mix of different types, consider breaking it down or ensuring it's compatible with NumSharp's capabilities.
             var npcArray = np.array(npc); // Convert to NDArray if needed.
@@ -153,22 +155,33 @@ namespace Celeste.Mod.Mia.NeuralNetwork
                                                        // Combine into a 2D object array if NumSharp supports it. Otherwise, consider saving these parts separately.
             Tuple<int[], int[], int[]> info = new Tuple<int[], int[], int[]>
             (
-                npc,
+                npc.ToArray(),
                 new int[] { },
                 new int[] {0}
             );
 
-            //            var biases = new NDArray[n - 1];
-            //var weights = np.zeros(n - 1,n-1);
 
-            command.Log("Checking if all dirs exist...");
             Directory.CreateDirectory("Mia");
+            if(Directory.Exists("Mia/weights") || Directory.Exists("Mia/biases")) 
+            {
+                command.Log("Some directories already exist.");
+                command.Log("The old structure will be saved, and a new one will be created");
+            }
+
+            DateTime currentDateTime = DateTime.Now;
+
+            string currentDate = currentDateTime.ToString("yyyyMMdd");
+            string currentTime = currentDateTime.ToString("HHmmss");
+
+            Directory.CreateDirectory($"Mia/mia_save{currentDate}_{currentTime}");
+
+            Utils.MoveDirectoryAndDeleteOld("Mia/weights", $"Mia/mia_save{currentDate}_{currentTime}");
+            Utils.MoveDirectoryAndDeleteOld("Mia/biases", $"Mia/mia_save{currentDate}_{currentTime}");
+
             Directory.CreateDirectory("Mia/weights");
             Directory.CreateDirectory("Mia/biases");
             Directory.CreateDirectory("Mia/info");
-            command.Log("Check terminated. Directory might have been added.");
 
-            command.Log("Making shit for weights and biases");
             for (int j = 0; j < n - 1; j++)
             {
                 var biases = np.random.randn(npc[j + 1]);
@@ -177,19 +190,20 @@ namespace Celeste.Mod.Mia.NeuralNetwork
                 CreateFileIfNotExist($"Mia/weights/weights_{j}.npy");
                 np.Save((Array)weights, $"Mia/weights/weights_{j}.npy");
                 CreateFileIfNotExist($"Mia/biases/biaises_{j}.npy");
-                np.Save((Array)biases, $"Mia/biases/biaises_{j}.npy");  
-
+                np.Save((Array)biases, $"Mia/biases/biaises_{j}.npy");
             }
-            command.Log("Done");
-            command.Log("Doing some shit with info");
-            np.Save(info.Item1,"Mia/info/info_npc");
+            np.Save(info.Item1, "Mia/info/info_npc");
             np.Save(info.Item2, "Mia/info/info_old_scores");
             np.Save((Array)info.Item3, "Mia/info/info_actual_score");
 
             command.Log("Finished.");
-           
+
+
+
             
-            /*try
+            
+
+            /*
             {
                 // Read the JSON from the file
                 string json = File.ReadAllText("Mia/weights.npy");
@@ -199,7 +213,7 @@ namespace Celeste.Mod.Mia.NeuralNetwork
                 Console.WriteLine(loadedArray[0].GetType());
 
             }
-            catch (Exception ex)
+            catch (Exception exfo
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
@@ -214,15 +228,9 @@ namespace Celeste.Mod.Mia.NeuralNetwork
             //            var info = np.Load<NDArray[]>("Mia/info.npy").ToArray();
             //double bestAcc = info[1];
 
-            Console.WriteLine(Main.UwuInt);
-            Main.UwuInt++;
-
             NDArray inputs = new NDArray(allTiles);
             NDArray trueInputs = inputs.reshape(1,400);
             NDArray labels = new NDArray(keypress);
-            CreateFileIfNotExist($"Mia/inputs.npy");
-            np.Save((Array)inputs, "Mia/inputs.npy");
-
             NDArray output = ForPropagation(trueInputs);
 
            BackPropagation(output, labels, lr);
@@ -274,10 +282,10 @@ namespace Celeste.Mod.Mia.NeuralNetwork
             try
             {
                 np.save("weights.npy", bestWeights); // -> Faire en sorte qu'il croit qu'il est defini
-                np.save("biases.npy", bestBiases); // -> Idem
+                np.save("sbiases.npy", bestBiases); // -> Idem
             }
             catch (NullReferenceException)
-            {
+            {sa 
                 throw new ArgumentException("pas de meilleure accuracy trouvé");
         }*/
         }
@@ -292,38 +300,17 @@ namespace Celeste.Mod.Mia.NeuralNetwork
         {
             DateTime currentDateTime = DateTime.Now;
 
-            // Extract date and time components
             string currentDate = currentDateTime.ToString("yyyyMMdd");
             string currentTime = currentDateTime.ToString("HHmmss");
             
             Directory.CreateDirectory($"Mia/mia_save{currentDate}_{currentTime}");
-            UtilsClass.Utils.MoveDirectory("Mia/weights", $"Mia/mia_save{currentDate}_{currentTime}");
-            UtilsClass.Utils.MoveDirectory("Mia/biases", $"Mia/mia_save{currentDate}_{currentTime}");
-            Directory.CreateDirectory("Mia/weights");
-            Directory.CreateDirectory("Mia/biases");
-            for (int j = 0; j < nn.Item1.Count ; j++)
-            {
-                var biases = nn.Item1[j].biases;
-                var weights = nn.Item1[j].weights;
-                CreateFileIfNotExist($"Mia/weights/weights_{j}.npy");
-                np.Save((Array)weights, $"Mia/weights/weights_{j}.npy");
-                CreateFileIfNotExist($"Mia/biases/biaises_{j}.npy");
-                np.Save((Array)biases, $"Mia/biases/biaises_{j}.npy");
-
-            }
-            CreateFileIfNotExist($"Mia/weights/weights_{nn.Item1.Count}.npy");
-            np.Save((Array)nn.Item2.weights, $"Mia/weights/weights_{nn.Item1.Count}.npy");
-            CreateFileIfNotExist($"Mia/biases/biaises_{nn.Item1.Count}.npy");
-            np.Save((Array)nn.Item2.biases, $"Mia/biases/biaises_{nn.Item1.Count}.npy");
-
-
-
+            UtilsClass.Utils.CopyDirectory("Mia/weights", $"Mia/mia_save{currentDate}_{currentTime}");
+            UtilsClass.Utils.CopyDirectory("Mia/biases", $"Mia/mia_save{currentDate}_{currentTime}");
         }
 
         public static NDArray ForPropagation(NDArray input)
         {
             nn.Item1[0].Forward(input);
-            Console.WriteLine(nn.Item1.Count);
             for (int i = 1; i < nn.Item1.Count; i++) // Adding all the values inside of FirstLayer
             {
                 nn.Item1[i].Forward(nn.Item1[i - 1].output);

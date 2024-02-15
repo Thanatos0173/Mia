@@ -36,6 +36,10 @@ namespace Celeste.Mod.KeyStrokes
         {
             base.Update();
             inputs = Utils.GetInputs();
+            if (inputs == null)
+            {
+                inputs =  new int[7] {0, 0, 0, 0, 0, 0, 0};
+            }
         }
 
         public override void Render()

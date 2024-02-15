@@ -110,6 +110,7 @@
     <Compile Include="Code\Module\DrawTiles.cs" />
     <Compile Include="Code\Module\EntitiesActions.cs" />
     <Compile Include="Code\Module\EntityExtensions.cs" />
+    <Compile Include="Code\Module\FileExist.cs" />
     <Compile Include="Code\Module\FileHandling.cs" />
     <Compile Include="Code\Module\FillPlage.cs" />
     <Compile Include="Code\Module\FirstLayers.cs" />

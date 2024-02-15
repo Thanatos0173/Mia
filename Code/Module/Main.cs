@@ -27,6 +27,9 @@ using Celeste.Mod.Mia.Actions;
 using Celeste.Mod.StaminaMeter;
 using System.Security.Policy;
 
+using NumSharp;
+using NumSharp.Extensions;
+
 namespace Celeste.Mod.Mia
 {
 
@@ -42,15 +45,9 @@ namespace Celeste.Mod.Mia
             Instance = this;
         }
 
-        private Stopwatch stopwatch;
-        private static Vector2 direction = new Vector2(1, 0);
 
         private static float baseTimer;
-        private static char[,] map;
-        private bool[] old { get; set; }
 
-        public static int UwuInt { get; set; } = 0;
-        private bool[] oldInput;
         private static double lr = 0.001;
         private static bool doPlay = false;
 
@@ -65,7 +62,6 @@ namespace Celeste.Mod.Mia
 
         
 
-        private List<bool> movements = Enumerable.Repeat(false, 7).ToList(); //{left,right,up,down,dash,grab,jump}
 
         [Command("mia", "Enable / Disable Mia")]
         public static void MiaCommand(string lrS)
@@ -82,16 +78,8 @@ namespace Celeste.Mod.Mia
             if(Settings.GetTiles) 
             {
                 NeuralNetwork.NeuralNetwork.Open();
-                if(Engine.Scene is Level level)
-                {
-                    map = level.SolidsData.ToArray();
-
-                }
             }
-            else
-            {
-                NeuralNetwork.NeuralNetwork.Save();
-            }
+            else NeuralNetwork.NeuralNetwork.Save();
             Engine.Commands.Log(" Mia is now " + (Settings.GetTiles ? "enable. " : "disable."), Color.GreenYellow);
             if (!doPlay)
             {
@@ -120,13 +108,6 @@ namespace Celeste.Mod.Mia
 
         }
 
-
-
-
-
-
-
-
         [Command("uwu", "say UwU")]
         public static void UwUCommand()
         {
@@ -135,13 +116,33 @@ namespace Celeste.Mod.Mia
         }
 
         [Command("create", "Create Neural Network Structure, Use carefully")]
-        public static void CreateCommand()
-        {
-            //            int[] settings = new int[] { 400, 2048, 1024, 56 };
-                        int[] settings = new int[] { 400, 128, 64, 56 };
+        public static void CreateCommand() {
+            List<int> settings = new List<int> { 400, 256, 128, 56 };
 
-            Engine.Commands.Log("Created the neural network with settings " + Utils.Convert2DArrayToString(settings));
+            if (File.Exists("Mia/structure_settings.txt") && new FileInfo("Mia/structure_settings.txt").Length != 0)
+            {
+                string[] toParse = File.ReadLines("Mia/structure_settings.txt").FirstOrDefault().Split(' ');
 
+                foreach (string substring in toParse)
+                {
+                    int result;
+                    // Try parsing the substring as a string
+                    if (!int.TryParse(substring, out result))
+                    {
+                        Console.WriteLine("File Issue: Creating Neural Network with hardcoded settings");
+                        settings = new List<int> { 400, 256, 128, 56 };
+                        break;
+                    }
+                    else
+                    {
+                        settings.Add(result);
+                    }
+                }
+                if (settings[settings.Count - 1] != 56) settings.Add(56);                
+            }
+            if (!File.Exists("Mia/structure_settings.txt")) File.Create("Mia/structure_settings.txt");
+            Engine.Commands.Log("Created the neural network with settings " + Utils.Convert2DArrayToString(settings.ToArray()));
+            Engine.Commands.Log("You can modify the structure settings without closing the game by modifying the file /Mia/structure_settings.txt, located in your Celeste SaveFile.");
             NeuralNetwork.NeuralNetwork.Create(settings, Engine.Commands);
 
         }
@@ -150,13 +151,21 @@ namespace Celeste.Mod.Mia
 
         public override void Load()
         {
-            Utils.Print("Mod Loaded ==========================================================================================================================================================================================================================================");
+            Utils.Print("Sacha V Mia Loaded");
             On.Celeste.Player.Update += ModPlayerUpdate;
-            Everest.Events.Player.OnSpawn += OnSpawn;
             Everest.Events.Level.OnLoadLevel += LoadLevel;
-            stopwatch = new Stopwatch();
+            On.Celeste.Level.LoadLevel += AddEntity;
         }
 
+        private void AddEntity(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
+        {
+            orig(self, playerIntro, isFromLoader);
+            if (self.Tracker.GetEntity<Player>() != null)
+            {
+                self.Add(new KeyStokesEntity());
+            }
+            
+        }
 
         private void LoadLevel(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
         {
@@ -167,10 +176,6 @@ namespace Celeste.Mod.Mia
             if (isFromLoader && !Settings.GetTiles)
             {
                 Utils.Print("Tiles won't be retreived. Change the option in the settings to make able to retrieve level, Mia will not work otherwise.");
-            }
-            if (isFromLoader && Settings.GetTiles)
-            {
-                map = level.SolidsData.ToArray();
             }
             if (level.Session.Area.ID < mainRoomsPerChapter.Count)
             {
@@ -188,34 +193,8 @@ namespace Celeste.Mod.Mia
         {
             Utils.Print("Mod unloaded");
             On.Celeste.Player.Update -= ModPlayerUpdate;
-            Everest.Events.Player.OnSpawn -= OnSpawn;
             Everest.Events.Level.OnLoadLevel -= LoadLevel;
-        }
-
-
-
-        private void OnSpawn(Player player)
-        {
-            if (Engine.Scene is Level level)
-            {
-                Console.WriteLine(level.Session.Area.LevelSet);
-            }
-
-            if (Main.Settings.KillPlayer) stopwatch.Restart();
-            if (Main.Settings.Debug && Main.Settings.KillPlayer) Utils.Print("Starting stopwatch");
-            if (baseTimer == null)
-            {
-                baseTimer = player.AutoJumpTimer;
-            }
-        }
-
-        private void Show(bool[] input)
-        {
-            string[] inputThing = { "Right", "Left", "Up", "Down", "Dash", "Jump", "Grab" };
-            for (int i = 0; i < 7; i++)
-            {
-                Console.Write(inputThing[i] + ": " + input[i] + " \n");
-            }
+            On.Celeste.Level.LoadLevel -= AddEntity;
         }
 
 
@@ -223,55 +202,35 @@ namespace Celeste.Mod.Mia
         int i = 0;
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
         {
-            if (Settings.SendRequests) Inputting.Move(movements);
             orig(self);
             GameWindow window = Engine.Instance.Window;
             if (Engine.Scene is Level level)
             {
-                if (Settings.GetTiles && self.Position != self.PreviousPosition)
+                if (Settings.GetTiles)
                 {
-                    if (self.Position != self.PreviousPosition)
+                    if (!doPlay)
                     {
-                        if (!doPlay && (self.Position != self.PreviousPosition)) 
+                        if (self.Position != self.PreviousPosition)
                         {
-//                            Console.WriteLine("Player moved");
-//?                            Utils.Print2dArray(map);
-                            NeuralNetwork.NeuralNetwork.Train(lr, 
+                          NeuralNetwork.NeuralNetwork.Train(lr, 
                                 Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))
-                                ,Utils.AllArray());
-
-                        }
-                        else
-                        {
-                            //NeuralNetwork.NeuralNetwork.ForPropagation(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, map, self)));
+                               ,Utils.AllArray());
 
                         }
                     }
-                    
+                    else
+                        {
+                            bool[] movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
+                            foreach(bool b in movements)
+                            {
+                                Console.Write(b.ToString() + " ");
+                            }
+                            Console.WriteLine();
+                            Inputting.Move(movements);
+                        }   
                 }
-
-
-                /*                if (GetIfInputHaveChanges)
-                                {
-                                    bool[] currentInput = Utils.GetInputs();
-
-                                    // Compare each element of the arrays to detect changes
-                                    bool inputChanged = oldInput == null || !Enumerable.SequenceEqual(currentInput, oldInput);
-
-                                    if (inputChanged)
-                                    {
-                                        //                    NeuralNetwork.NeuralNetwork.Create(Utils.AllArray());
-                                    }
-
-                                    // Update oldInput to the current state
-                                    oldInput = currentInput;
-
-                                }*/
-
                 if (Settings.GetTiles) window.Title = "Celeste.exe/Mia enabled";
                 else window.Title = "Celeste.exe/Mia not enabled";
-
-                level.Add(new KeyStokesEntity());
             }
         }
     }

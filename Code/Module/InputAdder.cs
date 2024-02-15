@@ -9,7 +9,7 @@ namespace Celeste.Mod.Mia.InputAdder
     public class Inputting
     {
         
-        public static bool Move(List<bool> movements)
+        public static bool Move(bool[] movements)
         {
             LoadMoveFile();
             List<String> movementsCorresponding = new List<string>() { "L", "R", "U", "D", "G", "X", "J" };
