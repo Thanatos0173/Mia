@@ -14,18 +14,23 @@ namespace Celeste.Mod.Mia.Actions
     {
         public static int Actions(Level level, Entity entity)
         {
-            string newPath = Environment.CurrentDirectory + @"\Mia";
-            if (!Directory.Exists(newPath)) Directory.CreateDirectory(newPath);
-            string filePath = newPath + @"\EntitiesID.txt";
+            if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+            string filePath = "Mia/EntitiesID.txt";
             if (!File.Exists(filePath)) using (File.Create(filePath)) { }
             var lines = File.ReadAllLines(filePath);
             int j=0;
+            if (!int.TryParse(lines[lines.Count()-1], out _))
+            {
+                using (StreamWriter sw = File.AppendText(filePath))
+                {
+                    sw.WriteLine("");
+                }
+                Console.WriteLine(lines[lines.Count() - 1]);
+            }
             if (entity is Solid || entity.HaveComponent("Celeste.PlayerCollider"))
             {
                 while(j < lines.Length) 
                 {
-//                    Console.WriteLine("j " + j + " " + lines.Length);
-
                     if (lines[j][0] == '#')
                     {
 

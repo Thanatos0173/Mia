@@ -5,6 +5,7 @@ using NumSharp;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
+using NumSharp.Generic;
 //using Newtonsoft.Json;
 
 namespace Celeste.Mod.Mia.UtilsClass
@@ -141,6 +142,76 @@ namespace Celeste.Mod.Mia.UtilsClass
             {
                 return new int[56];
             }
+            y_true[i] = 1;
+            return y_true;
+        }
+        public static NDArray AllArrayFromOld(double[] array)
+        {
+            NDArray y_true = new int[56];
+            int i = 0;
+
+            if (array[6] == 1 && array[4] != 1 && array[5] != 1)
+            {
+                i += 9;
+            }
+            else if (array[6] != 1 && array[4] == 1 && array[5] != 1)
+            {
+                i += 18;
+            }
+            else if (array[6] != 1 && array[4] != 1 && array[5] == 1)
+            {
+                i += 27;
+            }
+            else if (array[6] == 1 && array[4] == 1 && array[5] != 1)
+            {
+                i += 36;
+            }
+            else if (array[6] == 1 && array[4] != 1 && array[5] == 1)
+            {
+                i += 45;
+            }
+            else if (!(array[6] == 1 || array[4] == 1 || array[5] == 1))
+            {
+                return new int[56];
+            }
+
+            if (array[0] != 1 && array[1] != 1 && array[2] != 1 && array[3] == 1)
+            {
+                i += 1;
+            }
+            else if (array[0] != 1 && array[1] == 1 && array[2] != 1 && array[3] != 1)
+            {
+                i += 2;
+            }
+            else if (array[0] != 1 && array[1] != 1 && array[2] == 1 && array[3] != 1)
+            {
+                i += 3;
+            }
+            else if (array[0] == 1 && array[1] != 1 && array[2] != 1 && array[3] != 1)
+            {
+                i += 4;
+            }
+            else if (array[0] != 1 && array[1] == 1 && array[2] != 1 && array[3] == 1)
+            {
+                i += 5;
+            }
+            else if (array[0] == 1 && array[1] != 1 && array[2] != 1 && array[3] == 1)
+            {
+                i += 6;
+            }
+            else if (array[0] != 1 && array[1] == 1 && array[2] == 1 && array[3] != 1)
+            {
+                i += 7;
+            }
+            else if (array[0] == 1 && array[1] != 1 && array[2] == 1 && array[3] != 1)
+            {
+                i += 8;
+            }
+            else if (!(array[0] != 1 || array[1] != 1 || array[2] != 1 || array[3] != 1))
+            {
+                return new int[56];
+            }
+
             y_true[i] = 1;
             return y_true;
         }

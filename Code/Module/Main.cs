@@ -29,6 +29,9 @@ using System.Security.Policy;
 
 using NumSharp;
 using NumSharp.Extensions;
+using Microsoft.Xna.Framework.Input;
+using YamlDotNet.Serialization;
+using NumSharp.Generic;
 
 namespace Celeste.Mod.Mia
 {
@@ -53,6 +56,14 @@ namespace Celeste.Mod.Mia
 
         private static int roomCompleted;
         private static int currentRoom = 0;
+        private static int savedNumber = 0;
+        private static int planeIndex = 0;
+        private static NDArray threedimarray = np.zeros(10_000,20, 20);
+        private static NDArray twodimarray = np.zeros(10000, 7);
+
+
+
+
         private static List<List<string>> mainRoomsPerChapter = new List<List<string>>
         {
           new List<string>{"0", "1", "2"},
@@ -126,7 +137,7 @@ namespace Celeste.Mod.Mia
 
         [Command("create", "Create Neural Network Structure, Use carefully")]
         public static void CreateCommand() {
-            List<int> settings = new List<int> { 400, 256, 128, 56 };
+            List<int> settings = new List<int> {};
 
             if (File.Exists("Mia/structure_settings.txt") && new FileInfo("Mia/structure_settings.txt").Length != 0)
             {
@@ -147,7 +158,8 @@ namespace Celeste.Mod.Mia
                         settings.Add(result);
                     }
                 }
-                if (settings[settings.Count - 1] != 56) settings.Add(56);                
+                if (settings[settings.Count - 1] != 56) settings.Add(56);   
+                if(settings.Count == 0) settings = new List<int> { 400, 256, 128, 56 };
             }
             if (!File.Exists("Mia/structure_settings.txt")) File.Create("Mia/structure_settings.txt");
             Engine.Commands.Log("Created the neural network with settings " + Utils.Convert2DArrayToString(settings.ToArray()));
@@ -156,14 +168,61 @@ namespace Celeste.Mod.Mia
 
         }
 
+        private static void PrintProgressBar(double percentage, int one, int two)
+        {
+            int totalWidth = 100; // Total width of the progress bar
+            int numHashes = (int)(percentage * totalWidth);
+            string loadingBar = "[" + new string('#', numHashes) + new string(' ', totalWidth - numHashes) + "]";
+            Console.Write($"\r{loadingBar} {percentage * 100:0.00} % {one}/{two}");
+        }
 
+        [Command("train","Train the neural network")]
+        public static void TrainCommand()
+        {
+            Engine.Commands.Log("During this period of time, you won't be able to move");
+            Engine.Commands.Log("Mia will train by herself. A message will be sent when the training will be over.");
 
+            if (!Directory.Exists("Mia/Saves"))
+            {
+                Engine.Commands.Log("It seems like you have not record you plays. Mia can't train");
+                return;
+            }
+            NeuralNetwork.NeuralNetwork.Open();
+
+            for (int i = 0; i < Directory.GetFiles("Mia/Saves","*",SearchOption.AllDirectories).Length/2; i++)
+            {
+                var tdimarray = np.load($"Mia/Saves/ArraySaved_{i}.npy");
+                var tdiminput = np.load($"Mia/Saves/InputSaved_{i}.npy");
+                for(int j = 0; j < 10_000; j++)
+                {
+                    Engine.Commands.Log(tdimarray[j].Shape);
+                    double[] input = (double[])(Array)tdiminput[j];
+                    NeuralNetwork.NeuralNetwork.Train(lr, tdimarray[j], Utils.AllArrayFromOld(input ));
+                    double progress = (double)(i * 10_000 + j + 1) / (Directory.GetFiles("Mia/Saves", "*", SearchOption.AllDirectories).Length/2 * 10_000);
+
+                    // Update progress bar
+                    PrintProgressBar(progress, i * 10_000 + j, Directory.GetFiles("Mia/Saves", "*", SearchOption.AllDirectories).Length/2 * 10_000);
+                }
+            }
+            Engine.Commands.Log("Mia have been trained");
+
+        }
+        
         public override void Load()
         {
             Utils.Print("Sacha V Mia Loaded");
             On.Celeste.Player.Update += ModPlayerUpdate;
             Everest.Events.Level.OnLoadLevel += LoadLevel;
             On.Celeste.Level.LoadLevel += AddEntity;
+            Everest.Events.Level.OnExit += ExitLevel;
+        }
+
+        private void ExitLevel(Level level, LevelExit exit, LevelExit.Mode mode, Session session, HiresSnow snow)
+        {
+            if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+            if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
+            np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+            np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
         }
 
         private void AddEntity(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
@@ -204,9 +263,56 @@ namespace Celeste.Mod.Mia
             On.Celeste.Player.Update -= ModPlayerUpdate;
             Everest.Events.Level.OnLoadLevel -= LoadLevel;
             On.Celeste.Level.LoadLevel -= AddEntity;
+            if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+            if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
+            np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+            np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
+            Everest.Events.Level.OnExit -= ExitLevel;
+
         }
 
 
+        private static void Load2DInto3D(NDArray array2D, NDArray array3D, int planeIndex)
+        {
+            if (array2D.shape.Length != 2 || array3D.shape.Length != 3)
+            {
+                Console.WriteLine(array2D.shape.Length);
+                Console.WriteLine(array3D.shape.Length);
+                throw new ArgumentException("Array dimensions are not valid.");
+            }
+
+            if (array2D.shape[0] != array3D.shape[1] || array2D.shape[1] != array3D.shape[2])
+            {
+                throw new ArgumentException("Array dimensions are incompatible.");
+            }
+
+            if (planeIndex < 0 || planeIndex >= array3D.shape[0])
+            {
+                throw new ArgumentException("Plane index is out of bounds.");
+            }
+
+            array3D[planeIndex] = array2D;
+        }
+
+        private static void Load1DInto2D(NDArray array1D, NDArray array2D, int planeIndex)
+        {
+            if (array1D.shape.Length != 1 || array2D.shape.Length != 2)
+            {
+                throw new ArgumentException("Array dimensions are not valid.");
+            }
+
+            if (array1D.shape[0] != array2D.shape[1])
+            {
+                throw new ArgumentException("Array dimensions are incompatible.");
+            }
+
+            if (planeIndex < 0 || planeIndex >= array2D.shape[0])
+            {
+                throw new ArgumentException("Plane index is out of bounds.");
+            }
+
+            array2D[planeIndex] = array1D;
+        }
 
         int i = 0;
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
@@ -215,25 +321,44 @@ namespace Celeste.Mod.Mia
             GameWindow window = Engine.Instance.Window;
             if (Engine.Scene is Level level)
             {
-                if (Settings.GetTiles)
+                Load2DInto3D(new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)), threedimarray, planeIndex);
+                Load1DInto2D(new NDArray(Utils.GetInputs()), twodimarray, planeIndex);
+                ++planeIndex;
+                if(planeIndex >= 10_000)
                 {
-                    if (!doPlay)
-                    {
-                        if (self.Position != self.PreviousPosition)
-                        {
-                          NeuralNetwork.NeuralNetwork.Train(lr, 
-                                Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))
-                               ,Utils.AllArray());
-
-                        }
-                    }
-                    else
-                        {
-                            bool[] movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
-                            
-                            Inputting.Move(movements);
-                        }   
+                    Console.WriteLine("Creating New File");
+                    if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+                    if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
+                    np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+                    np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
+                    savedNumber++;
+                    planeIndex = 0;
+                    threedimarray = np.zeros(10_000,20, 20);
+                    twodimarray = np.zeros(10_000, 7);
                 }
+                
+
+
+                /*     if (Settings.GetTiles)
+            {
+                if (!doPlay)
+                {
+                    if (self.Position != self.PreviousPosition)
+                    {
+                      NeuralNetwork.NeuralNetwork.Train(lr, 
+                            Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))
+                           ,Utils.AllArray());
+
+                    }
+                }
+                else
+                    {
+                        bool[] movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
+
+                        Inputting.Move(movements);
+                    }   
+            }
+         */   
                 if (Settings.GetTiles) window.Title = "Celeste.exe/Mia enabled";
                 else window.Title = "Celeste.exe/Mia not enabled";
             }

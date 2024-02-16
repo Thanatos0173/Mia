@@ -115,6 +115,7 @@
     <Compile Include="Code\Module\FillPlage.cs" />
     <Compile Include="Code\Module\FirstLayers.cs" />
     <Compile Include="Code\Module\InputAdder.cs" />
+    <Compile Include="Code\Module\InputPlayer.cs" />
     <Compile Include="Code\Module\KeyStrokesDisplay.cs" />
     <Compile Include="Code\Module\LastLayer.cs" />
     <Compile Include="Code\Module\MiaOptions.cs" />
