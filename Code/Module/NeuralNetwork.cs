@@ -29,9 +29,18 @@ namespace Celeste.Mod.Mia.NeuralNetwork
             public void Forward(NDArray inputs)
             {
                 //   { 400, 2048, 1024, 56 }
-                this.inputs = inputs;
-                this.outputNotActivated = np.dot(inputs, this.weights) + this.biases; //np.dot
-                this.output = np.maximum(0, this.outputNotActivated);
+                try 
+                {
+                    this.inputs = inputs;
+                    this.outputNotActivated = np.dot(inputs, this.weights) + this.biases; //np.dot
+                    this.output = np.maximum(0, this.outputNotActivated);
+
+                }
+                catch (Exception)
+                {
+                    CreateFileIfNotExist("Mia/test.npy");
+                    np.Save((Array)inputs,"Mia/test.npy");
+                }
             }
 
             public void FirstLayerBackward(NDArray inputGradient, double learningRate)

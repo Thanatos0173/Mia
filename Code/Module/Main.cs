@@ -62,7 +62,7 @@ namespace Celeste.Mod.Mia
         private static NDArray twodimarray = np.zeros(10000, 7);
 
 
-
+        private static bool record;
 
         private static List<List<string>> mainRoomsPerChapter = new List<List<string>>
         {
@@ -105,9 +105,12 @@ namespace Celeste.Mod.Mia
             }
             catch(Exception ex) 
             {
+                Settings.GetTiles = false;
                 Engine.Commands.Log("An error ocured.");
                 Engine.Commands.Log("The problem might be that you haven't created the neural network");
                 Engine.Commands.Log("If you have created it, you might want to contact Thanatos_0173 on GitHub.");
+                Engine.Commands.Log("Details:");
+                Engine.Commands.Log(ex);
             }
 
         }
@@ -128,6 +131,14 @@ namespace Celeste.Mod.Mia
 
         }
 
+
+        [Command("record", "Record Command")]
+        public static void RecordCommand()
+        {
+            record = !record;
+        }
+
+
         [Command("uwu", "say UwU")]
         public static void UwUCommand()
         {
@@ -138,7 +149,7 @@ namespace Celeste.Mod.Mia
         [Command("create", "Create Neural Network Structure, Use carefully")]
         public static void CreateCommand() {
             List<int> settings = new List<int> {};
-
+            Console.WriteLine(new FileInfo("Mia/structure_settings.txt").Length);
             if (File.Exists("Mia/structure_settings.txt") && new FileInfo("Mia/structure_settings.txt").Length != 0)
             {
                 string[] toParse = File.ReadLines("Mia/structure_settings.txt").FirstOrDefault().Split(' ');
@@ -159,9 +170,9 @@ namespace Celeste.Mod.Mia
                     }
                 }
                 if (settings[settings.Count - 1] != 56) settings.Add(56);   
-                if(settings.Count == 0) settings = new List<int> { 400, 256, 128, 56 };
             }
             if (!File.Exists("Mia/structure_settings.txt")) File.Create("Mia/structure_settings.txt");
+            if (settings.Count == 0) settings = new List<int> { 400, 256, 128, 56 };
             Engine.Commands.Log("Created the neural network with settings " + Utils.Convert2DArrayToString(settings.ToArray()));
             Engine.Commands.Log("You can modify the structure settings without closing the game by modifying the file /Mia/structure_settings.txt, located in your Celeste SaveFile.");
             NeuralNetwork.NeuralNetwork.Create(settings, Engine.Commands);
@@ -321,22 +332,27 @@ namespace Celeste.Mod.Mia
             GameWindow window = Engine.Instance.Window;
             if (Engine.Scene is Level level)
             {
-                Load2DInto3D(new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)), threedimarray, planeIndex);
-                Load1DInto2D(new NDArray(Utils.GetInputs()), twodimarray, planeIndex);
-                ++planeIndex;
-                if(planeIndex >= 10_000)
+                if (record) 
                 {
-                    Console.WriteLine("Creating New File");
-                    if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
-                    if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
-                    np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
-                    np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
-                    savedNumber++;
-                    planeIndex = 0;
-                    threedimarray = np.zeros(10_000,20, 20);
-                    twodimarray = np.zeros(10_000, 7);
+                    Load2DInto3D(new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)), threedimarray, planeIndex);
+                    Console.WriteLine((Array)new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)));
+                    Load1DInto2D(new NDArray(Utils.GetInputs()), twodimarray, planeIndex);
+                    ++planeIndex;
+                    if (planeIndex >= 10_000)
+                    {
+                        Console.WriteLine("Creating New File");
+                        if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+                        if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
+                        np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+                        np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
+                        savedNumber++;
+                        planeIndex = 0;
+                        threedimarray = np.zeros(10_000, 20, 20);
+                        twodimarray = np.zeros(10_000, 7);
+                    }
+
                 }
-                
+
 
 
                 /*     if (Settings.GetTiles)
@@ -358,7 +374,7 @@ namespace Celeste.Mod.Mia
                         Inputting.Move(movements);
                     }   
             }
-         */   
+         */
                 if (Settings.GetTiles) window.Title = "Celeste.exe/Mia enabled";
                 else window.Title = "Celeste.exe/Mia not enabled";
             }
