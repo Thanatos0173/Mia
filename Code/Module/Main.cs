@@ -136,6 +136,12 @@ namespace Celeste.Mod.Mia
         public static void RecordCommand()
         {
             record = !record;
+            Engine.Commands.Log($"Recording set to {record}");
+            if (!record)
+            {
+                np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+                np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
+            }
         }
 
 
@@ -232,8 +238,9 @@ namespace Celeste.Mod.Mia
         {
             if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
             if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
-            np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
-            np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
+            
+            np.Save((Array)threedimarray[new Slice(0,planeIndex), new Slice(0,20), new Slice(0,20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+            np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
         }
 
         private void AddEntity(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
@@ -276,8 +283,8 @@ namespace Celeste.Mod.Mia
             On.Celeste.Level.LoadLevel -= AddEntity;
             if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
             if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
-            np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
-            np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
+            np.Save((Array)threedimarray[new Slice(0, planeIndex), new Slice(0, 20), new Slice(0, 20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+            np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
             Everest.Events.Level.OnExit -= ExitLevel;
 
         }
@@ -332,11 +339,9 @@ namespace Celeste.Mod.Mia
             GameWindow window = Engine.Instance.Window;
             if (Engine.Scene is Level level)
             {
-                if (record) 
+                if (record && self.Position != self.PreviousPosition) 
                 {
                     Load2DInto3D(new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)), threedimarray, planeIndex);
-                    Console.WriteLine((Array)new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)));
-                    Load1DInto2D(new NDArray(Utils.GetInputs()), twodimarray, planeIndex);
                     ++planeIndex;
                     if (planeIndex >= 10_000)
                     {
@@ -350,8 +355,8 @@ namespace Celeste.Mod.Mia
                         threedimarray = np.zeros(10_000, 20, 20);
                         twodimarray = np.zeros(10_000, 7);
                     }
-
                 }
+                
 
 
 

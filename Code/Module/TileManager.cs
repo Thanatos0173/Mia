@@ -58,15 +58,16 @@ namespace Celeste.Mod.Mia.TileManager
             int[,] tilesArray = GetTilesAroundPlayer(level, array, player);
 
             int[,] globalTiles = new int[20, 20];
-            for (int j = 0; j < 20; j++)
+            for (int i = 0; i < 20; i++)
             {
-                for (int i = 0; i < 20; i++)
+                for (int j = 0; j < 20; j++)
                 {
-                    if (entityArray[i, j] == 0) //There is no entity in that tile
+                    
+                    if (entityArray[j, i] == 0) //There is no entity in that tile
                     {
-                        globalTiles[i, j] = tilesArray[i, j];
+                        globalTiles[j, i] = tilesArray[i, j];
                     }
-                    else globalTiles[i, j] = entityArray[i, j];
+                    else globalTiles[j, i] = entityArray[i, j];
                 }
             }
             return globalTiles;
