@@ -74,7 +74,7 @@ namespace Celeste.Mod.Mia
         
 
 
-        [Command("mia", "Enable / Disable Mia")]
+        //[Command("mia", "Enable / Disable Mia")]
         public static void MiaCommand(string lrS)
         {
             try
@@ -115,7 +115,7 @@ namespace Celeste.Mod.Mia
 
         }
 
-        [Command("switch", "Switch from train to play / play to train")]
+        //[Command("switch", "Switch from train to play / play to train")]
         public static void SwitchCommand(string lrS)
         {
             
@@ -131,6 +131,21 @@ namespace Celeste.Mod.Mia
 
         }
 
+        [Command("Play", "Make Mia PLay")]
+        public static void PlayCommand(string lrS)
+        {
+
+            doPlay = !doPlay;
+            if (!doPlay)
+            {
+                Engine.Commands.Log("Mia is in mode Train. That mean that by playing normally the game, she will train by herself. To put it in play mode, you need to type the command \"switch\"");
+            }
+            else
+            {
+                Engine.Commands.Log("Mia is in mode Play. That mean that she will play by herself. To put it in train mode, you need to type the command \"switch\"");
+            }
+
+        }
 
         [Command("record", "Record Command")]
         public static void RecordCommand()
@@ -185,14 +200,6 @@ namespace Celeste.Mod.Mia
 
         }
 
-        private static void PrintProgressBar(double percentage, int one, int two)
-        {
-            int totalWidth = 100; // Total width of the progress bar
-            int numHashes = (int)(percentage * totalWidth);
-            string loadingBar = "[" + new string('#', numHashes) + new string(' ', totalWidth - numHashes) + "]";
-            Console.Write($"\r{loadingBar} {percentage * 100:0.00} % {one}/{two}");
-        }
-
         [Command("train","Train the neural network")]
         public static void TrainCommand()
         {
@@ -216,8 +223,6 @@ namespace Celeste.Mod.Mia
                     double[] input = (double[])(Array)tdiminput[j];
                     NeuralNetwork.NeuralNetwork.Train(lr, tdimarray[j], Utils.AllArrayFromOld(input ));
                     double progress = (double)(i * 10_000 + j + 1) / (Directory.GetFiles("Mia/Saves", "*", SearchOption.AllDirectories).Length/2 * 10_000);
-
-                    // Update progress bar
                     PrintProgressBar(progress, i * 10_000 + j, Directory.GetFiles("Mia/Saves", "*", SearchOption.AllDirectories).Length/2 * 10_000);
                 }
             }
@@ -230,27 +235,39 @@ namespace Celeste.Mod.Mia
             Utils.Print("Sacha V Mia Loaded");
             On.Celeste.Player.Update += ModPlayerUpdate;
             Everest.Events.Level.OnLoadLevel += LoadLevel;
-            On.Celeste.Level.LoadLevel += AddEntity;
             Everest.Events.Level.OnExit += ExitLevel;
         }
 
+        public override void Unload()
+        {
+            Utils.Print("Mod unloaded");
+            On.Celeste.Player.Update -= ModPlayerUpdate;
+            Everest.Events.Level.OnLoadLevel -= LoadLevel;
+            if (savedNumber != 0)
+            {
+                if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+                if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
+
+                np.Save((Array)threedimarray[new Slice(0, planeIndex), new Slice(0, 20), new Slice(0, 20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+                np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
+            }
+            Everest.Events.Level.OnExit -= ExitLevel;
+
+        }
         private void ExitLevel(Level level, LevelExit exit, LevelExit.Mode mode, Session session, HiresSnow snow)
         {
-            if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
-            if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
-            
-            np.Save((Array)threedimarray[new Slice(0,planeIndex), new Slice(0,20), new Slice(0,20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
-            np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
-        }
-
-        private void AddEntity(On.Celeste.Level.orig_LoadLevel orig, Level self, Player.IntroTypes playerIntro, bool isFromLoader)
-        {
-            orig(self, playerIntro, isFromLoader);
-            /*if (self.Tracker.GetEntity<Player>() != null)
+            if(record) 
             {
-                self.Add(new KeyStokesEntity());
-            }*/
-            
+                record = false;
+            }
+            if(savedNumber != 0) 
+            {
+                if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+                if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
+
+                np.Save((Array)threedimarray[new Slice(0, planeIndex), new Slice(0, 20), new Slice(0, 20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+                np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
+            }
         }
 
         private void LoadLevel(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
@@ -270,27 +287,17 @@ namespace Celeste.Mod.Mia
                     score++;
                 }
             }
-
-
-
         }
 
-        public override void Unload()
+        public static void PrintProgressBar(double percentage, int one, int two)
         {
-            Utils.Print("Mod unloaded");
-            On.Celeste.Player.Update -= ModPlayerUpdate;
-            Everest.Events.Level.OnLoadLevel -= LoadLevel;
-            On.Celeste.Level.LoadLevel -= AddEntity;
-            if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
-            if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
-            np.Save((Array)threedimarray[new Slice(0, planeIndex), new Slice(0, 20), new Slice(0, 20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
-            np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
-            Everest.Events.Level.OnExit -= ExitLevel;
-
+            int totalWidth = 100; // Total width of the progress bar
+            int numHashes = (int)(percentage * totalWidth);
+            string loadingBar = "[" + new string('#', numHashes) + new string(' ', totalWidth - numHashes) + "]";
+            Console.Write($"\r{loadingBar} {percentage * 100:0.00} % {one}/{two}");
         }
 
-
-        private static void Load2DInto3D(NDArray array2D, NDArray array3D, int planeIndex)
+        public static void Load2DInto3D(NDArray array2D, NDArray array3D, int planeIndex)
         {
             if (array2D.shape.Length != 2 || array3D.shape.Length != 3)
             {
@@ -312,7 +319,7 @@ namespace Celeste.Mod.Mia
             array3D[planeIndex] = array2D;
         }
 
-        private static void Load1DInto2D(NDArray array1D, NDArray array2D, int planeIndex)
+        public static void Load1DInto2D(NDArray array1D, NDArray array2D, int planeIndex)
         {
             if (array1D.shape.Length != 1 || array2D.shape.Length != 2)
             {
