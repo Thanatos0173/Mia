@@ -32,6 +32,7 @@ using NumSharp.Extensions;
 using Microsoft.Xna.Framework.Input;
 using YamlDotNet.Serialization;
 using NumSharp.Generic;
+using NumpyLib;
 
 namespace Celeste.Mod.Mia
 {
@@ -116,34 +117,16 @@ namespace Celeste.Mod.Mia
         }
 
         //[Command("switch", "Switch from train to play / play to train")]
-        public static void SwitchCommand(string lrS)
-        {
-            
-            doPlay = !doPlay;
-            if (!doPlay)
-            {
-                Engine.Commands.Log("Mia is in mode Train. That mean that by playing normally the game, she will train by herself. To put it in play mode, you need to type the command \"switch\"");
-            }
-            else
-            {
-                Engine.Commands.Log("Mia is in mode Play. That mean that she will play by herself. To put it in train mode, you need to type the command \"switch\"");
-            }
+        
 
-        }
-
-        [Command("Play", "Make Mia PLay")]
-        public static void PlayCommand(string lrS)
+        [Command("Play", "Make Mia Play")]
+        public static void PlayCommand()
         {
 
             doPlay = !doPlay;
-            if (!doPlay)
-            {
-                Engine.Commands.Log("Mia is in mode Train. That mean that by playing normally the game, she will train by herself. To put it in play mode, you need to type the command \"switch\"");
-            }
-            else
-            {
-                Engine.Commands.Log("Mia is in mode Play. That mean that she will play by herself. To put it in train mode, you need to type the command \"switch\"");
-            }
+            if (doPlay) record = false;
+            string a = doPlay ? "" : "not";
+            Engine.Commands.Log($"Mia should now be {a} playing");
 
         }
 
@@ -151,6 +134,7 @@ namespace Celeste.Mod.Mia
         public static void RecordCommand()
         {
             record = !record;
+            if (record) doPlay = false;
             Engine.Commands.Log($"Recording set to {record}");
             if (!record)
             {
@@ -349,6 +333,7 @@ namespace Celeste.Mod.Mia
                 if (record && self.Position != self.PreviousPosition) 
                 {
                     Load2DInto3D(new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)), threedimarray, planeIndex);
+                    Load1DInto2D(new NDArray(Utils.GetInputs()), twodimarray, planeIndex);
                     ++planeIndex;
                     if (planeIndex >= 10_000)
                     {
@@ -363,7 +348,12 @@ namespace Celeste.Mod.Mia
                         twodimarray = np.zeros(10_000, 7);
                     }
                 }
-                
+                if (doPlay && self.Position != self.PreviousPosition)
+                {
+                    bool[] movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
+                    Inputting.Move(movements);
+
+                }
 
 
 
