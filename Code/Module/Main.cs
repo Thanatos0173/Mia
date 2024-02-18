@@ -119,7 +119,7 @@ namespace Celeste.Mod.Mia
         //[Command("switch", "Switch from train to play / play to train")]
         
 
-        [Command("Play", "Make Mia Play")]
+        [Command("play", "Make Mia Play")]
         public static void PlayCommand()
         {
 
