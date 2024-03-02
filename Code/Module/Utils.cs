@@ -78,143 +78,7 @@ namespace Celeste.Mod.Mia.UtilsClass
 
             return oneDArray;
         }
-        public static int[] AllArray()
-        {
-            int[] y_true = new int[56];
-            int i = 0;
-            if ((Input.Grab.Check) && !(Input.DashPressed) && !(Input.Jump.Check))
-            {
-                i += 9;
-            }
-            else if (!(Input.Grab.Check) && (Input.DashPressed) && !(Input.Jump.Check))
-            {
-                i += 18;
-            }
-            else if (!(Input.Grab.Check) && !(Input.DashPressed) && (Input.Jump.Check))
-            {
-                i += 27;
-            }
-            else if ((Input.Grab.Check) && (Input.DashPressed) && !(Input.Jump.Check))
-            {
-                i += 36;
-            }
-            else if ((Input.Grab.Check) && !(Input.DashPressed) && (Input.Jump.Check))
-            {
-                i += 45;
-            }
-            else if (!(!(Input.Grab.Check) && !(Input.DashPressed) && !(Input.Jump.Check)))
-            {
-                return new int[56];
-            }
-            if (!(Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && (Input.MoveY.Value == 1))
-            {
-                i += 1;
-            }
-            else if (!(Input.MoveX.Value == 1) && (Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
-            {
-                i += 2;
-            }
-            else if (!(Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && (Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
-            {
-                i += 3;
-            }
-            else if ((Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
-            {
-                i += 4;
-            }
-            else if (!(Input.MoveX.Value == 1) && (Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && (Input.MoveY.Value == 1))
-            {
-                i += 5;
-            }
-            else if ((Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && (Input.MoveY.Value == 1))
-            {
-                i += 6;
-            }
-            else if (!(Input.MoveX.Value == 1) && (Input.MoveX.Value == -1) && (Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
-            {
-                i += 7;
-            }
-            else if ((Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && (Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1))
-            {
-                i += 8;
-            }
-            else if (!(!(Input.MoveX.Value == 1) && !(Input.MoveX.Value == -1) && !(Input.MoveY.Value == -1) && !(Input.MoveY.Value == 1)))
-            {
-                return new int[56];
-            }
-            y_true[i] = 1;
-            return y_true;
-        }
-        public static NDArray AllArrayFromOld(double[] array)
-        {
-            NDArray y_true = new int[56];
-            int i = 0;
-
-            if (array[6] == 1 && array[4] != 1 && array[5] != 1)
-            {
-                i += 9;
-            }
-            else if (array[6] != 1 && array[4] == 1 && array[5] != 1)
-            {
-                i += 18;
-            }
-            else if (array[6] != 1 && array[4] != 1 && array[5] == 1)
-            {
-                i += 27;
-            }
-            else if (array[6] == 1 && array[4] == 1 && array[5] != 1)
-            {
-                i += 36;
-            }
-            else if (array[6] == 1 && array[4] != 1 && array[5] == 1)
-            {
-                i += 45;
-            }
-            else if (!(array[6] == 1 || array[4] == 1 || array[5] == 1))
-            {
-                return new int[56];
-            }
-
-            if (array[0] != 1 && array[1] != 1 && array[2] != 1 && array[3] == 1)
-            {
-                i += 1;
-            }
-            else if (array[0] != 1 && array[1] == 1 && array[2] != 1 && array[3] != 1)
-            {
-                i += 2;
-            }
-            else if (array[0] != 1 && array[1] != 1 && array[2] == 1 && array[3] != 1)
-            {
-                i += 3;
-            }
-            else if (array[0] == 1 && array[1] != 1 && array[2] != 1 && array[3] != 1)
-            {
-                i += 4;
-            }
-            else if (array[0] != 1 && array[1] == 1 && array[2] != 1 && array[3] == 1)
-            {
-                i += 5;
-            }
-            else if (array[0] == 1 && array[1] != 1 && array[2] != 1 && array[3] == 1)
-            {
-                i += 6;
-            }
-            else if (array[0] != 1 && array[1] == 1 && array[2] == 1 && array[3] != 1)
-            {
-                i += 7;
-            }
-            else if (array[0] == 1 && array[1] != 1 && array[2] == 1 && array[3] != 1)
-            {
-                i += 8;
-            }
-            else if (!(array[0] != 1 || array[1] != 1 || array[2] != 1 || array[3] != 1))
-            {
-                return new int[56];
-            }
-
-            y_true[i] = 1;
-            return y_true;
-        }
+       
 
         public static bool[] GetWhatThingToMove(NDArray y_pred)
         {
@@ -296,26 +160,15 @@ namespace Celeste.Mod.Mia.UtilsClass
         {
             int[] inputs = new int[7];
 
-            if (Input.MoveX.Value == 1) inputs[0] = 1;
-            if (Input.MoveX.Value == -1) inputs[1] = 1;
-            if (Input.MoveY.Value == -1) inputs[2] = 1;
-            if (Input.MoveY.Value == 1) inputs[3] = 1;
-            if (Input.DashPressed) inputs[4] = 1;
-            if (Input.Jump.Check) inputs[5] = 1;
-            if (Input.Grab.Check) inputs[6] = 1;
-
+            if (Input.MoveX.Value == -1) inputs[0] = 1;
+            if (Input.MoveX.Value == 1) inputs[1] = 1;
+            if (Input.MoveY.Value == 1) inputs[2] = 1;
+            if (Input.MoveY.Value == -1) inputs[3] = 1;
+            if (Input.Grab.Check) inputs[4] = 1;
+            if (Input.DashPressed) inputs[5] = 1;
+            if (Input.Jump.Check) inputs[6] = 1;
             return inputs;
 
-        }
-
-
-        public static bool AreEquals(bool[] val1, bool[] val2) {
-            for(int i = 0; i < Math.Max(val1.Length,val2.Length); i++)
-            {
-                if (val1[i] != val2[i]) return false;
-            }
-            return true;
-        
         }
 
         public static void CopyDirectory(string source, string target)

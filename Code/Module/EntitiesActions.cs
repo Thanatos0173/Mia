@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Monocle;
 using Celeste.Mod.Mia.EntityExtension;
-using IL.MonoMod;
 
 namespace Celeste.Mod.Mia.Actions
 {

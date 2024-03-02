@@ -6,33 +6,12 @@ using Celeste.Mod.Mia.UtilsClass;
 using Celeste.Mod.Mia.Settings;
 
 
-using System.Diagnostics;
-using WindowsInput;
-using System.Runtime.InteropServices;
-
 using Celeste.Mod.Mia.InputAdder;
 using System.Collections.Generic;
 using System.Linq;
-using System.IO.Pipes;
 using System.IO;
-using myform;
-
-using System.Net.Sockets;
-using System.Text;
-using Celeste.Mod.Mia.NeuralNetwork;
-using Celeste.Mod.Mia.KeystrokesEntity;
-using System.Data.OleDb;
-using Celeste.Mod.Mia.EntityExtension;
-using Celeste.Mod.Mia.Actions;
-using Celeste.Mod.StaminaMeter;
-using System.Security.Policy;
 
 using NumSharp;
-using NumSharp.Extensions;
-using Microsoft.Xna.Framework.Input;
-using YamlDotNet.Serialization;
-using NumSharp.Generic;
-using NumpyLib;
 
 namespace Celeste.Mod.Mia
 {
@@ -50,13 +29,9 @@ namespace Celeste.Mod.Mia
         }
 
 
-        private static float baseTimer;
 
         private static double lr = 0.001;
         private static bool doPlay = false;
-
-        private static int roomCompleted;
-        private static int currentRoom = 0;
         private static int savedNumber = 0;
         private static int planeIndex = 0;
         private static NDArray threedimarray = np.zeros(10_000,20, 20);
@@ -64,7 +39,8 @@ namespace Celeste.Mod.Mia
 
 
         private static bool record;
-
+        int index = 0;
+        bool[] movements = new bool[7];
         private static List<List<string>> mainRoomsPerChapter = new List<List<string>>
         {
           new List<string>{"0", "1", "2"},
@@ -75,54 +51,12 @@ namespace Celeste.Mod.Mia
         
 
 
-        //[Command("mia", "Enable / Disable Mia")]
-        public static void MiaCommand(string lrS)
-        {
-            try
-            {
-                lr = double.Parse(lrS);
-            }
-            catch (ArgumentNullException)
-            {
-
-            }
-            Settings.GetTiles = !Settings.GetTiles;
-            try
-            {
-                if (Settings.GetTiles)
-                {
-                    NeuralNetwork.NeuralNetwork.Open();
-                }
-                else NeuralNetwork.NeuralNetwork.Save();
-                Engine.Commands.Log(" Mia is now " + (Settings.GetTiles ? "enable. " : "disable."), Color.GreenYellow);
-                if (!doPlay)
-                {
-                    Engine.Commands.Log("Mia is in mode Train. That mean that by playing normally the game, she will train by herself. To put it in play mode, you need to type the command \"switch\"");
-                }
-                else
-                {
-                    Engine.Commands.Log("Mia is in mode Play. That mean that she will play by herself. To put it in train mode, you need to type the command \"switch\"");
-                }
-            }
-            catch(Exception ex) 
-            {
-                Settings.GetTiles = false;
-                Engine.Commands.Log("An error ocured.");
-                Engine.Commands.Log("The problem might be that you haven't created the neural network");
-                Engine.Commands.Log("If you have created it, you might want to contact Thanatos_0173 on GitHub.");
-                Engine.Commands.Log("Details:");
-                Engine.Commands.Log(ex);
-            }
-
-        }
-
-        //[Command("switch", "Switch from train to play / play to train")]
         
 
         [Command("play", "Make Mia Play")]
         public static void PlayCommand()
         {
-
+            if (!doPlay) NeuralNetwork.NeuralNetwork.Open();
             doPlay = !doPlay;
             if (doPlay) record = false;
             string a = doPlay ? "" : "not";
@@ -141,6 +75,14 @@ namespace Celeste.Mod.Mia
                 np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
                 np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
             }
+        }
+
+
+        [Command("save", "Save Command")]
+        public static void SaveCommand()
+        {
+            NeuralNetwork.NeuralNetwork.Open();
+            NeuralNetwork.NeuralNetwork.Save();
         }
 
 
@@ -183,37 +125,7 @@ namespace Celeste.Mod.Mia
             NeuralNetwork.NeuralNetwork.Create(settings, Engine.Commands);
 
         }
-
-        [Command("train","Train the neural network")]
-        public static void TrainCommand()
-        {
-            Engine.Commands.Log("During this period of time, you won't be able to move");
-            Engine.Commands.Log("Mia will train by herself. A message will be sent when the training will be over.");
-
-            if (!Directory.Exists("Mia/Saves"))
-            {
-                Engine.Commands.Log("It seems like you have not record you plays. Mia can't train");
-                return;
-            }
-            NeuralNetwork.NeuralNetwork.Open();
-
-            for (int i = 0; i < Directory.GetFiles("Mia/Saves","*",SearchOption.AllDirectories).Length/2; i++)
-            {
-                var tdimarray = np.load($"Mia/Saves/ArraySaved_{i}.npy");
-                var tdiminput = np.load($"Mia/Saves/InputSaved_{i}.npy");
-                for(int j = 0; j < 10_000; j++)
-                {
-                    Engine.Commands.Log(tdimarray[j].Shape);
-                    double[] input = (double[])(Array)tdiminput[j];
-                    NeuralNetwork.NeuralNetwork.Train(lr, tdimarray[j], Utils.AllArrayFromOld(input ));
-                    double progress = (double)(i * 10_000 + j + 1) / (Directory.GetFiles("Mia/Saves", "*", SearchOption.AllDirectories).Length/2 * 10_000);
-                    PrintProgressBar(progress, i * 10_000 + j, Directory.GetFiles("Mia/Saves", "*", SearchOption.AllDirectories).Length/2 * 10_000);
-                }
-            }
-            Engine.Commands.Log("Mia have been trained");
-
-        }
-        
+       
         public override void Load()
         {
             Utils.Print("Sacha V Mia Loaded");
@@ -256,10 +168,6 @@ namespace Celeste.Mod.Mia
 
         private void LoadLevel(Level level, Player.IntroTypes playerIntro, bool isFromLoader)
         {
-            if (isFromLoader)
-            {
-                roomCompleted = 0;
-            }
             if (isFromLoader && !Settings.GetTiles)
             {
                 Utils.Print("Tiles won't be retreived. Change the option in the settings to make able to retrieve level, Mia will not work otherwise.");
@@ -323,7 +231,6 @@ namespace Celeste.Mod.Mia
             array2D[planeIndex] = array1D;
         }
 
-        int i = 0;
         private void ModPlayerUpdate(On.Celeste.Player.orig_Update orig, Player self)
         {
             orig(self);
@@ -348,35 +255,16 @@ namespace Celeste.Mod.Mia
                         twodimarray = np.zeros(10_000, 7);
                     }
                 }
-                if (doPlay && self.Position != self.PreviousPosition)
+                
+                if (doPlay && !Input.ESC) { 
+                if (index%20 == 0)
                 {
-                    bool[] movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
-                    Inputting.Move(movements);
-
+                    movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
                 }
-
-
-
-                /*     if (Settings.GetTiles)
-            {
-                if (!doPlay)
-                {
-                    if (self.Position != self.PreviousPosition)
-                    {
-                      NeuralNetwork.NeuralNetwork.Train(lr, 
-                            Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))
-                           ,Utils.AllArray());
-
-                    }
+                if (doPlay && Input.ESC) doPlay = false;
+                Inputting.MoveAsync(new bool[7] {false,true,false,false,false,false,true});
+                ++index;
                 }
-                else
-                    {
-                        bool[] movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
-
-                        Inputting.Move(movements);
-                    }   
-            }
-         */
                 if (Settings.GetTiles) window.Title = "Celeste.exe/Mia enabled";
                 else window.Title = "Celeste.exe/Mia not enabled";
             }

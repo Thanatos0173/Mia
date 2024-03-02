@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using Celeste.Mod.Mia;
-using Celeste.Mod.Mia.Code.Exceptions;
 using Celeste.Mod.Mia.UtilsClass;
 
 namespace Celeste.Mod.Mia.NeuralNetwork
@@ -100,9 +97,6 @@ namespace Celeste.Mod.Mia.NeuralNetwork
         }
 
         private static Tuple<List<FirstLayers>, LastLayer> nn;
-        private static NDArray accInput;
-        private static NDArray accLabel;
-        //private static NDArray dstest;
 
         private static void CreateFileIfNotExist(string filePath)
         {
@@ -129,13 +123,7 @@ namespace Celeste.Mod.Mia.NeuralNetwork
             {
                 biases.Add(np.load(file));
             }
-
-            //            np.Load<double[]>(weightsPath).Select(arr => np.array(arr)).ToList();
-            //          var biases = np.Load<double[]>(biasesPath).Select(arr => np.array(arr)).ToList();
-            //dstest = np.Load<double[][]>(testPath).Select(arr => np.array(arr)).ToArray();
             int n = weights.Count;
-            //accInput = np.array(dstest.Select(item => item[1]).ToArray()); // Comprendre le 
-            //accLabel = np.array(dstest.Select(item => item[0]).ToArray()); // probleme
 
             nn = new Tuple<List<FirstLayers>, LastLayer>(
                 new List<FirstLayers>(), 
@@ -151,8 +139,6 @@ namespace Celeste.Mod.Mia.NeuralNetwork
         public static void Create(List<int> npc, Monocle.Commands command)
         {
             int n = npc.Count;
-            // Adjust the info object to be a more straightforward structure.
-            // Since it's a mix of different types, consider breaking it down or ensuring it's compatible with NumSharp's capabilities.
             var npcArray = np.array(npc); // Convert to NDArray if needed.
             var zeroArray = np.array(new int[] { 0 }); // Convert to NDArray if needed.
                                                        // Combine into a 2D object array if NumSharp supports it. Otherwise, consider saving these parts separately.
@@ -193,8 +179,8 @@ namespace Celeste.Mod.Mia.NeuralNetwork
                 Console.WriteLine($"Weights number {j} : {weights.Shape}");
                 CreateFileIfNotExist($"Mia/weights/weights_{j}.npy");
                 np.Save((Array)weights, $"Mia/weights/weights_{j}.npy");
-                CreateFileIfNotExist($"Mia/biases/biaises_{j}.npy");
-                np.Save((Array)biases, $"Mia/biases/biaises_{j}.npy");
+                CreateFileIfNotExist($"Mia/biases/biases_{j}.npy");
+                np.Save((Array)biases, $"Mia/biases/biases_{j}.npy");
             }
             np.Save(info.Item1, "Mia/info/info_npc");
             np.Save(info.Item2, "Mia/info/info_old_scores");
@@ -207,235 +193,6 @@ namespace Celeste.Mod.Mia.NeuralNetwork
             
             
 
-            /*
-            {
-                // Read the JSON from the file
-                string json = File.ReadAllText("Mia/weights.npy");
-
-                // Deserialize the JSON to NDArray[]
-                NDArray[] loadedArray = JsonConvert.DeserializeObject<NDArray[]>(json);
-                Console.WriteLine(loadedArray[0].GetType());
-
-            }
-            catch (Exception exfo
-            {
-                Console.WriteLine($"Error: {ex.Message}");
-            }
-            //np.save("Mia/weights.npy", weights);
-            np.save("Mia/biases.npy", biases);*/
-        }
-
-
-        public static void Train(double lr, int[]  allTiles, int[] keypress)
-        {
-            //            CreateFileIfNotExist("Mia/info.npy");
-            //            var info = np.Load<NDArray[]>("Mia/info.npy").ToArray();
-            //double bestAcc = info[1];
-
-            NDArray inputs = new NDArray(allTiles);
-            NDArray trueInputs = inputs.reshape(1,400);
-            NDArray labels = new NDArray(keypress);
-            NDArray output = ForPropagation(trueInputs);
-            BackPropagation(output, labels, lr);
-
-            
-            /*double acc = Accuracy();
-            if (acc == 0 || bestAcc - acc > 0.3)
-            {
-                throw new ArgumentException("l'accuracy a chuté, diminuer le learning rate pourrait régler le problème");
-            }
-            info[2] = np.add(info[2], acc);
-               
-            if (acc > bestAcc)
-            {
-                Console.WriteLine($"l'accuracy a augmenté, la voici : {acc}");
-                bestAcc = acc;
-                info[1] = bestAcc;
-                   
-                List<double[,]> bestWeights = new List<double[,]>();
-                List<double[]> bestBiases = new List<double[]>();
-                    
-                np.save("info.npy", info); for (int j = 0; j < nn.Item1.Count; j++)
-                {
-                    bestWeights.Add((double[,])nn.Item1[j].weights.Clone());
-                    bestBiases.Add((double[])nn.Item1[j].biases.Clone());
-                }
-                bestWeights.Add((double[,])nn.Item2.weights.Clone());
-                bestBiases.Add((double[])nn.Item2.biases.Clone());
-                try
-                {
-                    np.save("weights.npy", bestWeights.ToArray()); // -> Faire en sorte qu'il croit qu'il est defini
-                    np.save("biases.npy", bestBiases.ToArray()); // -> Idem
-                }
-                catch (NullReferenceException)
-                {
-                    throw new ArgumentException("pas de meilleure accuracy trouvé");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"l'accuracy n'a pas augmenté, la voici : {acc}");
-            }*/
-
-
-            /*
-             On enregistre le fichier ssi l'accuracy a augmentee
-            info[1] = bestAcc;
-            np.save("info.npy", info);
-            try
-            {
-                np.save("weights.npy", bestWeights); // -> Faire en sorte qu'il croit qu'il est defini
-                np.save("sbiases.npy", bestBiases); // -> Idem
-            }
-            catch (NullReferenceException)
-            {sa 
-                throw new ArgumentException("pas de meilleure accuracy trouvé");
-        }*/
-        }
-        public static void Train(double lr, NDArray allTiles, NDArray keypress)
-        {
-            //            CreateFileIfNotExist("Mia/info.npy");
-            //            var info = np.Load<NDArray[]>("Mia/info.npy").ToArray();
-            //double bestAcc = info[1];
-
-//            NDArray inputs = new NDArray(allTiles);
-            NDArray trueInputs = allTiles.reshape(1, 400);
-            //          NDArray labels = new NDArray(keypress);
-
-            NDArray output = ForPropagation(trueInputs);
-
-
-            BackPropagation(output, keypress, lr);
-
-
-            /*double acc = Accuracy();
-            if (acc == 0 || bestAcc - acc > 0.3)
-            {
-                throw new ArgumentException("l'accuracy a chuté, diminuer le learning rate pourrait régler le problème");
-            }
-            info[2] = np.add(info[2], acc);
-               
-            if (acc > bestAcc)
-            {
-                Console.WriteLine($"l'accuracy a augmenté, la voici : {acc}");
-                bestAcc = acc;
-                info[1] = bestAcc;
-                   
-                List<double[,]> bestWeights = new List<double[,]>();
-                List<double[]> bestBiases = new List<double[]>();
-                    
-                np.save("info.npy", info); for (int j = 0; j < nn.Item1.Count; j++)
-                {
-                    bestWeights.Add((double[,])nn.Item1[j].weights.Clone());
-                    bestBiases.Add((double[])nn.Item1[j].biases.Clone());
-                }
-                bestWeights.Add((double[,])nn.Item2.weights.Clone());
-                bestBiases.Add((double[])nn.Item2.biases.Clone());
-                try
-                {
-                    np.save("weights.npy", bestWeights.ToArray()); // -> Faire en sorte qu'il croit qu'il est defini
-                    np.save("biases.npy", bestBiases.ToArray()); // -> Idem
-                }
-                catch (NullReferenceException)
-                {
-                    throw new ArgumentException("pas de meilleure accuracy trouvé");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"l'accuracy n'a pas augmenté, la voici : {acc}");
-            }*/
-
-
-            /*
-             On enregistre le fichier ssi l'accuracy a augmentee
-            info[1] = bestAcc;
-            np.save("info.npy", info);
-            try
-            {
-                np.save("weights.npy", bestWeights); // -> Faire en sorte qu'il croit qu'il est defini
-                np.save("sbiases.npy", bestBiases); // -> Idem
-            }
-            catch (NullReferenceException)
-            {sa 
-                throw new ArgumentException("pas de meilleure accuracy trouvé");
-        }*/
-        }
-        public static void Train(double lr, NDArray allTiles, int[] keypress)
-        {
-            //            CreateFileIfNotExist("Mia/info.npy");
-            //            var info = np.Load<NDArray[]>("Mia/info.npy").ToArray();
-            //double bestAcc = info[1];
-
-            //            NDArray inputs = new NDArray(allTiles);
-            NDArray trueInputs = allTiles.reshape(1, 400);
-            //          NDArray labels = new NDArray(keypress);
-            NDArray labels = new NDArray(keypress);
-
-            NDArray output = ForPropagation(trueInputs);
-
-
-            BackPropagation(output, labels, lr);
-
-
-            /*double acc = Accuracy();
-            if (acc == 0 || bestAcc - acc > 0.3)
-            {
-                throw new ArgumentException("l'accuracy a chuté, diminuer le learning rate pourrait régler le problème");
-            }
-            info[2] = np.add(info[2], acc);
-               
-            if (acc > bestAcc)
-            {
-                Console.WriteLine($"l'accuracy a augmenté, la voici : {acc}");
-                bestAcc = acc;
-                info[1] = bestAcc;
-                   
-                List<double[,]> bestWeights = new List<double[,]>();
-                List<double[]> bestBiases = new List<double[]>();
-                    
-                np.save("info.npy", info); for (int j = 0; j < nn.Item1.Count; j++)
-                {
-                    bestWeights.Add((double[,])nn.Item1[j].weights.Clone());
-                    bestBiases.Add((double[])nn.Item1[j].biases.Clone());
-                }
-                bestWeights.Add((double[,])nn.Item2.weights.Clone());
-                bestBiases.Add((double[])nn.Item2.biases.Clone());
-                try
-                {
-                    np.save("weights.npy", bestWeights.ToArray()); // -> Faire en sorte qu'il croit qu'il est defini
-                    np.save("biases.npy", bestBiases.ToArray()); // -> Idem
-                }
-                catch (NullReferenceException)
-                {
-                    throw new ArgumentException("pas de meilleure accuracy trouvé");
-                }
-            }
-            else
-            {
-                Console.WriteLine($"l'accuracy n'a pas augmenté, la voici : {acc}");
-            }*/
-
-
-            /*
-             On enregistre le fichier ssi l'accuracy a augmentee
-            info[1] = bestAcc;
-            np.save("info.npy", info);
-            try
-            {
-                np.save("weights.npy", bestWeights); // -> Faire en sorte qu'il croit qu'il est defini
-                np.save("sbiases.npy", bestBiases); // -> Idem
-            }
-            catch (NullReferenceException)
-            {sa 
-                throw new ArgumentException("pas de meilleure accuracy trouvé");
-        }*/
-        }
-
-        public static double Accuracy()
-        {
-            NDArray output = ForPropagation(accInput);
-            return np.mean(np.argmax(output, axis: 1) == accLabel);
         }
 
         public static void Save()

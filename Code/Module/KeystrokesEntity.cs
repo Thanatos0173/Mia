@@ -1,5 +1,3 @@
-using System;
-using Celeste.Mod.KeyStrokes;
 using Celeste.Mod.StaminaMeter;
 using Monocle;
 
