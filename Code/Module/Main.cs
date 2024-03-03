@@ -12,7 +12,6 @@ using System.Linq;
 using System.IO;
 
 using NumSharp;
-
 namespace Celeste.Mod.Mia
 {
 
@@ -36,8 +35,6 @@ namespace Celeste.Mod.Mia
         private static int planeIndex = 0;
         private static NDArray threedimarray = np.zeros(10_000,20, 20);
         private static NDArray twodimarray = np.zeros(10000, 7);
-
-
         private static bool record;
         int index = 0;
         bool[] movements = new bool[7];
@@ -48,10 +45,10 @@ namespace Celeste.Mod.Mia
         };
         public int score = 0;
 
-        
 
 
-        
+
+
 
         [Command("play", "Make Mia Play")]
         public static void PlayCommand()
@@ -72,6 +69,8 @@ namespace Celeste.Mod.Mia
             Engine.Commands.Log($"Recording set to {record}");
             if (!record)
             {
+                if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
+                if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
                 np.Save((Array)threedimarray[new Slice(0, planeIndex), new Slice(0, 20), new Slice(0, 20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
                 np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
 
@@ -101,7 +100,6 @@ namespace Celeste.Mod.Mia
             if (File.Exists("Mia/structure_settings.txt") && new FileInfo("Mia/structure_settings.txt").Length != 0)
             {
                 string[] toParse = File.ReadLines("Mia/structure_settings.txt").FirstOrDefault().Split(' ');
-
                 foreach (string substring in toParse)
                 {
                     int result;
@@ -126,7 +124,7 @@ namespace Celeste.Mod.Mia
             NeuralNetwork.NeuralNetwork.Create(settings, Engine.Commands);
 
         }
-       
+
         public override void Load()
         {
             Utils.Print("Sacha V Mia Loaded");
@@ -144,7 +142,6 @@ namespace Celeste.Mod.Mia
             {
                 if (!Directory.Exists("Mia")) Directory.CreateDirectory("Mia");
                 if (!Directory.Exists("Mia/Saves")) Directory.CreateDirectory("Mia/Saves");
-
                 np.Save((Array)threedimarray[new Slice(0, planeIndex), new Slice(0, 20), new Slice(0, 20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
                 np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
             }
@@ -238,7 +235,7 @@ namespace Celeste.Mod.Mia
             GameWindow window = Engine.Instance.Window;
             if (Engine.Scene is Level level)
             {
-                if (record && self.Position != self.PreviousPosition) 
+                if (record && self.Position != self.PreviousPosition)
                 {
                     Load2DInto3D(new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)), threedimarray, planeIndex);
                     Load1DInto2D(new NDArray(Utils.GetInputs()), twodimarray, planeIndex);
