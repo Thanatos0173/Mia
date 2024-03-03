@@ -15,7 +15,7 @@ namespace Celeste.Mod.Mia.Actions
             if (!File.Exists(filePath)) using (File.Create(filePath)) { }
             var lines = File.ReadAllLines(filePath);
             int j=0;
-            if (!int.TryParse(lines[lines.Count()-1], out _))
+            if (new FileInfo(filePath).Length != 0 &&  !int.TryParse(lines[lines.Count()-1], out _))
             {
                 using (StreamWriter sw = File.AppendText(filePath))
                 {

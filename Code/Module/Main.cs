@@ -262,7 +262,7 @@ namespace Celeste.Mod.Mia
                     movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
                 }
                 if (doPlay && Input.ESC) doPlay = false;
-                Inputting.MoveAsync(new bool[7] {false,true,false,false,false,false,true});
+                Inputting.MoveAsync(movements);
                 ++index;
                 }
                 if (Settings.GetTiles) window.Title = "Celeste.exe/Mia enabled";
