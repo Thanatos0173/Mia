@@ -72,8 +72,9 @@ namespace Celeste.Mod.Mia
             Engine.Commands.Log($"Recording set to {record}");
             if (!record)
             {
-                np.Save((Array)threedimarray, $"Mia/Saves/ArraySaved_{savedNumber}.npy");
-                np.Save((Array)twodimarray, $"Mia/Saves/InputSaved_{savedNumber}.npy");
+                np.Save((Array)threedimarray[new Slice(0, planeIndex), new Slice(0, 20), new Slice(0, 20)], $"Mia/Saves/ArraySaved_{savedNumber}.npy");
+                np.Save((Array)twodimarray[new Slice(0, planeIndex), new Slice(0, 7)], $"Mia/Saves/InputSaved_{savedNumber}.npy");
+
             }
         }
 
