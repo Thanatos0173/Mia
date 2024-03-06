@@ -3,6 +3,7 @@ using Monocle;
 using Celeste.Mod.Mia.Plage;
 using Celeste.Mod.Mia.EntityExtension;
 using Celeste.Mod.Mia.Actions;
+using System.Security.Policy;
 
 namespace Celeste.Mod.Mia.TileManager
 {
@@ -43,7 +44,7 @@ namespace Celeste.Mod.Mia.TileManager
                     int incrJ = j - (playerY - 10);
                     try
                     {
-                        if (array[i, j] != '0') tilesAroundPlayer[incrI, incrJ] = 1; //Due to binary representation : Something is 0000000, nothing is 1111111, and there is 125 entities that can be stored. For now, I think it's more than enough.
+                        if (array[i, j] != '0') tilesAroundPlayer[incrI, incrJ] = 1; 
                         else tilesAroundPlayer[incrI, incrJ] = 0;
                     }
                     catch (IndexOutOfRangeException) { tilesAroundPlayer[incrI, incrJ] = 1; }
@@ -51,7 +52,17 @@ namespace Celeste.Mod.Mia.TileManager
             }
             return tilesAroundPlayer;
         }
+        public static bool isAboveVoid(Player entity,Level level)
+        {
+            LevelData room = level.Session.LevelData;
+            int yMinPosition = room.Bounds.Bottom;
+            for (int i = (int)entity.Position.Y; i != yMinPosition; i+= ((int)entity.Position.Y < yMinPosition) ? 1 : -1)
+            {
+                if (level.CollideCheck(new Microsoft.Xna.Framework.Vector2(entity.Position.X, i), 5)) { return false && entity.Position != entity.PreviousPosition;  } //If we are not moving, then either we are flying, nor we are not falling but the code say we are due to impretisions.
+            }   
+            return true;
 
+        }
         public static int[,] FusedArrays(Level level, char[,] array, Player player)
         {
             int[,] entityArray = GetEntityAroundPlayerAsTiles(level, player);

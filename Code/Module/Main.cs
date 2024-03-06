@@ -46,7 +46,8 @@ namespace Celeste.Mod.Mia
         public int score = 0;
 
 
-
+        private static bool isOnVoid = false;
+        private static int leapNumber = 0;
 
 
 
@@ -235,6 +236,22 @@ namespace Celeste.Mod.Mia
             GameWindow window = Engine.Instance.Window;
             if (Engine.Scene is Level level)
             {
+                if (TileManager.TileManager.isAboveVoid(self, level) && !isOnVoid) // We have started a leap
+                {
+                    isOnVoid = true;
+                }
+                if(isOnVoid && self.Dead) // We have failed or leap (skill issue tbh)
+                {
+                    isOnVoid = false;
+                    leapNumber = 0;
+                }
+                if(!TileManager.TileManager.isAboveVoid(self,level) & isOnVoid)
+                {
+                    isOnVoid = false;
+                    leapNumber++;
+                }
+                Console.Write('\r' + leapNumber.ToString() + "         ");
+
                 if (record && self.Position != self.PreviousPosition)
                 {
                     Load2DInto3D(new NDArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self)), threedimarray, planeIndex);
@@ -253,8 +270,7 @@ namespace Celeste.Mod.Mia
                         twodimarray = np.zeros(10_000, 7);
                     }
                 }
-                
-                if (doPlay && !Input.ESC) { 
+                if (doPlay && !Input.ESC) {
                 if (index%20 == 0)
                 {
                     movements = Utils.GetWhatThingToMove(NeuralNetwork.NeuralNetwork.ForPropagation(new NDArray(Utils.Convert2DArrayTo1DArray(TileManager.TileManager.FusedArrays(level, level.SolidsData.ToArray(), self))).reshape(1, 400)));
